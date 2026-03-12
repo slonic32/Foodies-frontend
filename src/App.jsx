@@ -40,16 +40,17 @@ export default function App() {
         <div>
             <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
-                    <Route path="/" element={<RestrictedRoute redirectTo="/privatpage" component={<HomePage />} />} />
+                    {/* HomePage is public – visible to everyone */}
+                    <Route path="/" element={<HomePage />} />
 
                     <Route
                         path="/signup"
-                        element={<RestrictedRoute redirectTo="/privatpage" component={<SignUpPage />} />}
+                        element={<RestrictedRoute redirectTo="/" component={<SignUpPage />} />}
                     />
 
                     <Route
                         path="/signin"
-                        element={<RestrictedRoute redirectTo="/privatpage" component={<SignInPage />} />}
+                        element={<RestrictedRoute redirectTo="/" component={<SignInPage />} />}
                     />
 
                     <Route

@@ -1,0 +1,105 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.logo {
+    font-family: 'Mulish', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background-color: #ffffff;
+    border-radius: 30px;
+    padding: 1px;
+}
+
+.signInBtn {
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: #1c1c1c;
+    background: transparent;
+    border: none;
+    border-radius: 30px;
+    padding: 9px 21px;
+    height: 38px;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.signInBtn:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.signUpBtn {
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: #fff;
+    background-color: #1A1A1A;
+    border: none;
+    border-radius: 30px;
+    padding: 9px 21px;
+    height: 38px;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.signUpBtn:hover {
+    background-color: #333;
+}
+
+.userBtn {
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: background 0.2s;
+}
+
+.userBtn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+@media screen and (min-width: 768px) {
+    .header {
+        padding: 20px 32px;
+    }
+
+    .logo {
+        font-size: 22px;
+    }
+
+    .signInBtn,
+    .signUpBtn {
+        font-size: 14px;
+        padding: 9px 24px;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .header {
+        padding: 24px 60px;
+    }
+}

@@ -16,3 +16,54 @@
         max-width: 1440px;
     }
 }
+
+.page {
+    min-height: 100vh;
+    background-color: #f8f8f8;
+    font-family: 'Mulish', sans-serif;
+}
+
+/* ── Black hero block: border-radius 20px, margin 8px ── */
+.heroBlock {
+    background-color: #050505;
+    border-radius: 20px;
+    margin: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Categories section ─────────────────────────────── */
+.categoriesSection {
+    padding: 40px 20px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.categoriesSubtitle {
+    max-width: 480px;
+    margin-bottom: 8px;
+}
+
+@media screen and (min-width: 768px) {
+    .heroBlock {
+        margin: 12px;
+    }
+
+    .categoriesSection {
+        padding: 56px 32px 40px;
+        gap: 20px;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .heroBlock {
+        margin: 16px;
+    }
+
+    .categoriesSection {
+        padding: 72px 60px 56px;
+        gap: 24px;
+    }
+}
