@@ -1,0 +1,330 @@
+.container {
+    max-width: 375px;
+
+    overflow-x: hidden;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    height: 780px;
+    background: var(--background);
+}
+
+.title {
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 100%;
+    letter-spacing: -0.01em;
+    color: var(--main);
+    margin-top: 170px;
+    margin-left: 16px;
+    margin-bottom: 32px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    max-width: 311px;
+    margin-left: 16px;
+    margin-right: 16px;
+    position: relative;
+}
+
+.iconOne {
+    display: none;
+    position: absolute;
+    cursor: pointer;
+}
+
+.iconTwo {
+    display: none;
+    position: absolute;
+    cursor: pointer;
+}
+
+.firstInput {
+    border: 1px solid rgba(47, 47, 47, 0.2);
+    border-radius: 15px;
+    height: 50px;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 129%;
+    letter-spacing: -0.01em;
+    color: rgba(47, 47, 47, 0.6);
+    padding-left: 16px;
+    background-color: var(--background);
+    margin-bottom: 16px;
+}
+
+.firstInput:focus {
+    outline: none;
+}
+
+.secondInput {
+    composes: firstInput;
+    width: 100%;
+}
+
+.secondInput:focus {
+    outline: none;
+}
+
+.thirdInput {
+    composes: firstInput;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.thirdInput:focus {
+    outline: none;
+}
+
+.email {
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 129%;
+    letter-spacing: -0.01em;
+    color: var(--main-text);
+    margin-left: 16px;
+    margin-bottom: 8px;
+}
+
+.password {
+    composes: email;
+}
+
+.repeat {
+    composes: email;
+}
+
+.errorInput {
+    width: 100%;
+    margin-right: 16px;
+    border: 1px solid red;
+    border-radius: 15px;
+    height: 50px;
+    color: red;
+    outline: none;
+    padding-left: 16px;
+    background-color: var(--background);
+}
+
+.errorIn {
+    width: 100%;
+    margin-right: 16px;
+    border: 1px solid red;
+    border-radius: 15px;
+    height: 50px;
+    color: red;
+    outline: none;
+    padding-left: 16px;
+    background-color: var(--background);
+}
+
+.error {
+    margin-left: 16px;
+    color: red;
+    margin: 7px 0 10px 16px;
+    font-size: 14px;
+}
+
+.button {
+    margin: 32px 16px 16px;
+    border-radius: 30px;
+    height: 50px;
+    background: var(--accent);
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 129%;
+    letter-spacing: -0.01em;
+    text-align: center;
+    color: var(--main);
+}
+
+.button:hover {
+    background-color: #87d28d;
+}
+
+.button:focus {
+    background-color: #e6e6e6;
+    color: #bcbcbc;
+}
+
+.text {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 129%;
+    letter-spacing: -0.01em;
+    color: rgba(47, 47, 47, 0.5);
+    text-align: center;
+}
+
+.link {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-skip-ink: none;
+    color: var(--main-text);
+}
+
+/* 768 */
+@media screen and (min-width: 768px) {
+    .container {
+        max-width: 768px;
+    }
+
+    .section {
+        height: 960px;
+    }
+
+    .title {
+        font-size: 36px;
+        line-height: 106%;
+        margin-top: 227px;
+        margin-left: 134px;
+    }
+
+    .field {
+        max-width: 436px;
+        margin-left: 134px;
+        margin-right: 134px;
+        position: relative;
+    }
+
+    .iconOne {
+        display: block;
+        position: absolute;
+        margin-left: 400px;
+        margin-top: 18px;
+    }
+
+    .iconTwo {
+        display: block;
+        position: absolute;
+        margin-left: 400px;
+        margin-top: 18px;
+    }
+
+    .toggle {
+        display: flex;
+    }
+
+    .firstInput {
+        height: 56px;
+        width: 436px;
+        font-size: 16px;
+        line-height: 150%;
+        padding-left: 16px;
+        margin-bottom: 16px;
+    }
+
+    .firstInput:focus {
+        outline: none;
+    }
+
+    .secondInput {
+        composes: firstInput;
+        display: relative;
+        width: 436px;
+    }
+
+    .secondInput:focus {
+        outline: none;
+    }
+
+    .thirdInput {
+        composes: firstInput;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .thirdInput:focus {
+        outline: none;
+    }
+
+    .email {
+        font-size: 16px;
+        line-height: 150%;
+        margin-left: 0;
+    }
+
+    .password {
+        composes: email;
+    }
+
+    .repeat {
+        composes: email;
+    }
+
+    .errorInput {
+        height: 56px;
+    }
+
+    .errorIn {
+        margin-right: 0;
+        height: 56px;
+        color: red;
+        outline: none;
+        padding-left: 16px;
+        background-color: var(--background);
+    }
+
+    .error {
+        margin-left: 16px;
+        color: red;
+        margin: 7px 0 10px 16px;
+        font-size: 16px;
+    }
+
+    .button {
+        margin-top: 32px;
+        margin-left: 134px;
+        width: 436px;
+        height: 60px;
+        font-size: 16px;
+        line-height: 150%;
+    }
+
+    .text {
+        font-size: 16px;
+        line-height: 150%;
+    }
+}
+
+/* 1440 */
+@media screen and (min-width: 1440px) {
+    .container {
+        max-width: 1440px;
+    }
+
+    .section {
+        width: 672px;
+        height: 736px;
+    }
+
+    .title {
+        margin-top: 130px;
+        margin-left: 118px;
+    }
+
+    .field {
+        margin-left: 118px;
+        margin-right: 118px;
+        position: relative;
+    }
+
+    .button {
+        margin-left: 118px;
+    }
+}
