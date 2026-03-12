@@ -1,0 +1,35 @@
+.container {
+    max-width: 383px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.page {
+    margin: 16px 0;
+    position: relative;
+}
+
+@media screen and (min-width: 768px) {
+    .container {
+        display: block;
+        max-width: 768px;
+        padding: 0 32px;
+    }
+
+    .page {
+        margin: 32px 0;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .container {
+        max-width: 1440px;
+    }
+
+    .page {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        position: relative;
+    }
+}
