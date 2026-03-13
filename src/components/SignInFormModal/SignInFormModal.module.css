@@ -1,0 +1,113 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.title {
+    font-family: 'Mulish', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 28px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    font-family: 'Mulish', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input {
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    height: 48px;
+    padding: 0 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.inputError {
+    border-color: #ff6b6b;
+}
+
+.passwordWrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.passwordWrap .input {
+    padding-right: 44px;
+}
+
+.eyeBtn {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.eyeBtn:hover {
+    color: #fff;
+}
+
+.error {
+    font-family: 'Mulish', sans-serif;
+    font-size: 12px;
+    color: #ff6b6b;
+    margin: 0;
+}
+
+.submitBtn {
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #1c1c1c;
+    background-color: #fff;
+    border: none;
+    border-radius: 30px;
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.submitBtn:hover {
+    background-color: #e0e0e0;
+}

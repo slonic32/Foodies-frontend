@@ -1,0 +1,201 @@
+/* Mobile first ─────────────────────────────────────── */
+.hero {
+    padding: 40px 20px 0;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+/* ── Text block ──────────────────────────────────────── */
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.title {
+    font-family: 'Mulish', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #ffffff;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+}
+
+.subtitle {
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    max-width: 320px;
+}
+
+.addRecipeBtn {
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 14px 40px;
+    background: transparent;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.addRecipeBtn:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Images block ────────────────────────────────────── */
+.imagesBlock {
+    position: relative;
+    width: 320px;
+    height: 310px;
+    flex-shrink: 0;
+    margin: 0 auto;
+}
+
+/* Main image – 190×172px, left: 116px, radius: 30px, rotation: 12° */
+.imgMain {
+    position: absolute;
+    left: 116px;
+    top: 0;
+    width: 190px;
+    height: 172px;
+    object-fit: cover;
+    border-radius: 30px;
+    transform: rotate(-12deg);
+}
+
+/* Secondary image – smaller, left side */
+.imgSecondary {
+    position: absolute;
+    left: 26.64px;
+    top: 50px;
+    width: 77px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 15px;
+    transform: rotate(11deg);
+    z-index: 1;
+}
+
+/* ── 375px ───────────────────────────────────────────── */
+@media screen and (min-width: 375px) {
+    .title {
+        font-size: 40px;
+    }
+}
+
+/* ── Tablet 768px ────────────────────────────────────── */
+@media screen and (min-width: 768px) {
+    .hero {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 48px 32px 0;
+        gap: 32px;
+    }
+
+    .content {
+        align-items: flex-start;
+        text-align: left;
+        max-width: 380px;
+        flex-shrink: 0;
+        padding-bottom: 60px;
+    }
+
+    .title {
+        font-size: 52px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+        max-width: 340px;
+    }
+
+    .addRecipeBtn {
+        font-size: 16px;
+        padding: 16px 44px;
+    }
+
+    .imagesBlock {
+        flex: 1;
+        max-width: 420px;
+        height: 360px;
+    }
+
+    .imgMain {
+        width: 72%;
+        max-width: 340px;
+        height: 300px;
+        border-radius: 22px;
+    }
+
+    .imgSecondary {
+        width: 36%;
+        max-width: 160px;
+        height: 160px;
+        border-radius: 18px;
+        bottom: 30px;
+    }
+}
+
+/* ── Desktop 1440px ──────────────────────────────────── */
+@media screen and (min-width: 1440px) {
+    .hero {
+        padding: 56px 60px 0;
+        gap: 80px;
+    }
+
+    .content {
+        max-width: 520px;
+        padding-bottom: 80px;
+    }
+
+    .title {
+        font-size: 70px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+        max-width: 440px;
+    }
+
+    .addRecipeBtn {
+        font-size: 18px;
+        padding: 18px 52px;
+    }
+
+    .imagesBlock {
+        max-width: 580px;
+        height: 460px;
+    }
+
+    .imgMain {
+        max-width: 460px;
+        height: 400px;
+        border-radius: 28px;
+    }
+
+    .imgSecondary {
+        max-width: 220px;
+        height: 220px;
+        border-radius: 22px;
+        bottom: 40px;
+    }
+}
