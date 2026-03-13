@@ -35,7 +35,8 @@
 
 /* ── Categories section ─────────────────────────────── */
 .categoriesSection {
-    padding: 40px 20px 40px;
+    padding: 0 20px;
+    margin-top: 60px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -43,7 +44,6 @@
 
 .categoriesSubtitle {
     max-width: 480px;
-    margin-bottom: 8px;
 }
 
 @media screen and (min-width: 768px) {
@@ -52,7 +52,8 @@
     }
 
     .categoriesSection {
-        padding: 56px 32px 40px;
+        padding: 0 32px;
+        margin-top: 60px;
         gap: 20px;
     }
 }
@@ -63,7 +64,8 @@
     }
 
     .categoriesSection {
-        padding: 72px 60px 56px;
+        padding: 0 60px;
+        margin-top: 60px;
         gap: 24px;
     }
 }
