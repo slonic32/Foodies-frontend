@@ -1,0 +1,112 @@
+/* Footer component styles */
+.footer {
+    padding: 0 20px 40px;
+    margin-top: 60px;
+    font-family: 'Mulish', sans-serif;
+}
+
+.container {
+    max-width: 383px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.logo {
+    font-family: 'Mulish', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: #1c1c1c;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    transition: opacity 0.2s;
+}
+
+.logo:hover {
+    opacity: 0.8;
+}
+
+/* ── Social links ────────────────────────────────────── */
+.socialLinks {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.socialLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #BFBEBE;
+    border-radius: 50%;
+    transition: all 0.2s;
+    background-color: transparent;
+}
+
+.socialLink:hover {
+    background-color: #1c1c1c;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    transition: filter 0.2s;
+}
+
+.socialLink:hover .icon {
+    filter: invert(1);
+}
+
+/* ── Divider ─────────────────────────────────────────── */
+.divider {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    height: 1px;
+    background-color: rgba(28, 28, 28, 0.2);
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+/* ── Copyright text ──────────────────────────────────── */
+.copyright {
+    font-size: 14px;
+    color: #1c1c1c;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* ── Responsive ──────────────────────────────────────── */
+@media screen and (min-width: 768px) {
+    .footer {
+        padding: 40px 32px;
+    }
+
+    .container {
+        max-width: 768px;
+    }
+
+    .copyright {
+        font-size: 16px;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .footer {
+        padding: 60px 20px;
+    }
+
+    .container {
+        max-width: 1440px;
+    }
+
+    .divider {
+        display: none;
+    }
+}

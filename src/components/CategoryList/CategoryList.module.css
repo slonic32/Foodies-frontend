@@ -34,42 +34,47 @@
     left: 16px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .name {
     font-family: 'Mulish', sans-serif;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     color: #ffffff;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #ffffff;
     border-radius: 30px;
-    padding: 6px 16px;
-    backdrop-filter: blur(4px);
+    padding: 12px 12px;
+    line-height: 1;
+    white-space: nowrap;
+    height: 40px;
+    display: flex;
+    align-items: center;
 }
 
 .arrowBtn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
+    background: transparent;
+    border: 1px solid #ffffff;
     cursor: pointer;
     transition: background 0.2s;
-    backdrop-filter: blur(4px);
+    flex-shrink: 0;
+    text-decoration: none;
 }
 
 .arrowBtn:hover {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 /* ── "All Categories" dark tile ──────────────────────── */
 .allCard {
-    background-color: #1c1c1c;
+    background-color: #050505;
     display: flex;
     align-items: center;
     justify-content: center;

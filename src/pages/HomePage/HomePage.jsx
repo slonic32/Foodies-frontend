@@ -5,6 +5,8 @@ import SignInModal from '../../components/SignInModal/SignInModal';
 import MainTitle from '../../components/MainTitle/MainTitle';
 import Subtitle from '../../components/Subtitle/Subtitle';
 import CategoryList from '../../components/CategoryList/CategoryList';
+import Testimonials from '../../components/Testimonials/Testimonials';
+import Footer from '../../components/Footer/Footer';
 import css from './HomePage.module.css';
 
 function HomePage() {
@@ -31,6 +33,12 @@ function HomePage() {
                 </Subtitle>
                 <CategoryList />
             </section>
+
+            {/* ── Testimonials section ────────────────────── */}
+            <Testimonials />
+
+            {/* ── Footer ──────────────────────────────────── */}
+            <Footer />
 
             {/* ── Modals ──────────────────────────────────── */}
             {isSignInOpen && (
