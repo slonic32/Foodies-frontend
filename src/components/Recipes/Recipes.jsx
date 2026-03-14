@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRecipesByCategory } from '../../redux/recipes/operations';
 import { selectRecipes, selectIsLoading, selectError } from '../../redux/recipes/selectors';
@@ -10,9 +9,7 @@ import RecipeList from '../RecipeList/RecipeList';
 import RecipePagination from '../RecipePagination/RecipePagination';
 import css from './Recipes.module.css';
 
-function Recipes() {
-    const { category } = useParams();
-    const navigate = useNavigate();
+function Recipes({ category, onBack }) {
     const dispatch = useDispatch();
     
     const recipes = useSelector(selectRecipes);
@@ -34,10 +31,6 @@ function Recipes() {
         }
     }, [category, dispatch]);
 
-    const handleBackClick = () => {
-        navigate('/');
-    };
-
     const handleFilterChange = () => {
         setCurrentPage(1);
     };
@@ -51,7 +44,7 @@ function Recipes() {
             {/* Back Button */}
             <button 
                 className={css.backBtn}
-                onClick={handleBackClick}
+                onClick={onBack}
                 aria-label="Back to categories"
             >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">

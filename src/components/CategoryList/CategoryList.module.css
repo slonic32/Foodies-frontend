@@ -18,6 +18,11 @@
     border-radius: 20px;
     overflow: hidden;
     aspect-ratio: 4 / 3;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    transition: transform 0.3s ease;
 }
 
 .image {
@@ -62,30 +67,10 @@
     border-radius: 50%;
     background: transparent;
     border: 1px solid #ffffff;
-    cursor: pointer;
-    transition: background 0.2s;
     flex-shrink: 0;
-    text-decoration: none;
-}
-
-.arrowBtn:hover {
-    background: rgba(255, 255, 255, 0.15);
 }
 
 /* ── "All Categories" dark tile ──────────────────────── */
-.allCardLink {
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-}
-
-.allCardLink:hover {
-    opacity: 0.85;
-}
-
 .allCard {
     background-color: #050505;
     display: flex;

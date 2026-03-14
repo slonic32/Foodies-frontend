@@ -19,45 +19,27 @@ function RecipeFilters({ onFilterChange }) {
         onFilterChange(newFilters);
     };
 
-    const handleReset = () => {
-        const resetFilters = { ingredients: '', area: '' };
-        setFilters(resetFilters);
-        onFilterChange(resetFilters);
-    };
-
     return (
         <div className={css.filtersContainer}>
-            <div className={css.filterGroup}>
-                <select
-                    className={css.select}
-                    value={filters.ingredients}
-                    onChange={handleIngredientChange}
-                    aria-label="Filter by ingredients"
-                >
-                    <option value="">Ingredients</option>
-                    {/* Options will be populated from API */}
-                </select>
-            </div>
-
-            <div className={css.filterGroup}>
-                <select
-                    className={css.select}
-                    value={filters.area}
-                    onChange={handleAreaChange}
-                    aria-label="Filter by area"
-                >
-                    <option value="">Area</option>
-                    {/* Options will be populated from API */}
-                </select>
-            </div>
-
-            <button
-                className={css.resetBtn}
-                onClick={handleReset}
-                aria-label="Reset filters"
+            <select
+                className={css.select}
+                value={filters.ingredients}
+                onChange={handleIngredientChange}
+                aria-label="Filter by ingredients"
             >
-                Reset
-            </button>
+                <option value="">Ingredients</option>
+                {/* Options will be populated from API */}
+            </select>
+
+            <select
+                className={css.select}
+                value={filters.area}
+                onChange={handleAreaChange}
+                aria-label="Filter by area"
+            >
+                <option value="">Area</option>
+                {/* Options will be populated from API */}
+            </select>
         </div>
     );
 }

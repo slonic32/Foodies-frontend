@@ -22,7 +22,6 @@ const SignUpPage = lazy(() => import('./pages/SignUpPage/SignUpPage.jsx'));
 const PrivatPage = lazy(() => import('./pages/PrivatPage/PrivatPage.jsx'));
 const LogOutPage = lazy(() => import('./pages/LogOutPage/LogOutPage.jsx'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage/ErrorPage.jsx'));
-const Recipes = lazy(() => import('./components/Recipes/Recipes.jsx'));
 
 export default function App() {
     const dispatch = useDispatch();
@@ -43,11 +42,6 @@ export default function App() {
                 <Routes>
                     {/* HomePage is public – visible to everyone */}
                     <Route path="/" element={<HomePage />} />
-
-                    <Route
-                        path="/categories/:category"
-                        element={<Recipes />}
-                    />
 
                     <Route
                         path="/signup"
