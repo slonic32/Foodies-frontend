@@ -73,6 +73,19 @@
 }
 
 /* ── "All Categories" dark tile ──────────────────────── */
+.allCardLink {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.allCardLink:hover {
+    opacity: 0.85;
+}
+
 .allCard {
     background-color: #050505;
     display: flex;
