@@ -1,11 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { authReducer } from './auth/slice';
+import { categoriesReducer } from './categories/slice';
+import { recipesReducer } from './recipes/slice';
+import { filtersReducer } from './filters/slice';
 
 import { persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
+        categories: categoriesReducer,
+        recipes: recipesReducer,
+        filters: filtersReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
