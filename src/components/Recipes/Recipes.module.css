@@ -1,0 +1,61 @@
+/* Recipes Container */
+.container {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Back Button */
+.backBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #050505;
+    border: 1px solid #050505;
+    color: #BFBEBE;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px 16px;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+}
+
+.backBtn:hover {
+    color: #ffffff;
+    background: #1a1a1a;
+}
+
+.backBtn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Title */
+.title {
+    margin-bottom: 15px;
+    color: #050505;
+}
+
+/* Subtitle */
+.subtitle {
+    margin-bottom: 40px;
+    color: #BFBEBE;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 16px;
+    }
+
+    .title {
+        font-size: 28px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+}

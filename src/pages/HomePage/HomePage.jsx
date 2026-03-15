@@ -6,6 +6,7 @@ import SignUpModal from '../../components/SignUpModal/SignUpModal';
 import MainTitle from '../../components/MainTitle/MainTitle';
 import Subtitle from '../../components/Subtitle/Subtitle';
 import CategoryList from '../../components/CategoryList/CategoryList';
+import Recipes from '../../components/Recipes/Recipes';
 import Testimonials from '../../components/Testimonials/Testimonials';
 import Footer from '../../components/Footer/Footer';
 import css from './HomePage.module.css';
@@ -122,6 +123,7 @@ function LogOutModal({ onClose }) {
 function HomePage() {
     const [isSignInOpen, setIsSignInOpen] = useState(false);
     const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+
     const [isLogOutOpen, setIsLogOutOpen] = useState(false);
 
     const openSignInModal = () => {
@@ -146,6 +148,9 @@ function HomePage() {
     const closeSignUpModal = () => setIsSignUpOpen(false);
     const closeLogOutModal = () => setIsLogOutOpen(false);
 
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
+
     return (
         <div className={css.page}>
             {/* ── Black hero block ────────────────────────── */}
@@ -158,18 +163,24 @@ function HomePage() {
                 <Hero onAddRecipeClick={openSignInModal} />
             </div>
 
-            {/* ── Categories section ──────────────────────── */}
+            {/* ── Categories or Recipes section ──────────────────────── */}
             <section className={css.categoriesSection}>
-                <MainTitle>Categories</MainTitle>
-                <Subtitle className={css.categoriesSubtitle}>
-                    Discover a limitless world of culinary possibilities and enjoy exquisite recipes
-                    that combine taste, style and the warm atmosphere of the kitchen.
-                </Subtitle>
-                <CategoryList />
+                {!selectedCategory ? (
+                    <>
+                        <MainTitle>Categories</MainTitle>
+                        <Subtitle className={css.categoriesSubtitle}>
+                            Discover a limitless world of culinary possibilities and enjoy exquisite recipes
+                            that combine taste, style and the warm atmosphere of the kitchen.
+                        </Subtitle>
+                        <CategoryList onSelectCategory={setSelectedCategory} />
+                    </>
+                ) : (
+                    <Recipes category={selectedCategory} onBack={() => setSelectedCategory(null)} />
+                )}
             </section>
 
             {/* ── Testimonials section ────────────────────── */}
-            <Testimonials />
+            {!selectedCategory && <Testimonials />}
 
             {/* ── Footer ──────────────────────────────────── */}
             <Footer />
