@@ -5,8 +5,8 @@ export default function PrivatPage() {
     return (
         <div className={css.container}>
             <h1>Hello! Privat page is under construction. Please, wait a little bit.</h1>
-            <NavLink to="/logout" className={css.linkSignIn}>
-                | Log Out |
+            <NavLink to="/" className={css.linkSignIn}>
+                | Back Home |
             </NavLink>
         </div>
     );

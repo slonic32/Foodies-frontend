@@ -10,18 +10,21 @@ import css from './SignInFormModal.module.css';
 
 const schema = Yup.object().shape({
     email: Yup.string().email('Invalid email address').required('Email is required'),
-    password: Yup.string().min(7, 'Password must be at least 7 characters').required('Password is required'),
+    password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
 });
 
-export default function SignInFormModal({ onClose }) {
+export default function SignInFormModal({ onClose, onCreateAccount }) {
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
 
     const {
         register,
         handleSubmit,
-        formState: { errors },
-    } = useForm({ resolver: yupResolver(schema) });
+        formState: { errors, isValid, isSubmitting },
+    } = useForm({
+        resolver: yupResolver(schema),
+        mode: 'onChange',
+    });
 
     const onSubmit = (data) => {
         dispatch(login(data))
@@ -37,45 +40,63 @@ export default function SignInFormModal({ onClose }) {
 
     return (
         <div className={css.wrapper}>
-            <h2 className={css.title}>Sign In</h2>
+            <h2 className={css.title}>SIGN IN</h2>
             <form onSubmit={handleSubmit(onSubmit)} className={css.form} noValidate>
-                <div className={css.field}>
-                    <label className={css.label}>Email</label>
+                <div className={css.fieldWrap}>
+                    <label htmlFor="signin-email" className="visually-hidden">
+                        Email
+                    </label>
                     <input
+                        id="signin-email"
                         className={errors.email ? `${css.input} ${css.inputError}` : css.input}
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder="Email*"
+                        aria-label="Email"
                         {...register('email')}
                     />
                     {errors.email && <p className={css.error}>{errors.email.message}</p>}
                 </div>
 
-                <div className={css.field}>
-                    <label className={css.label}>Password</label>
-                    <div className={css.passwordWrap}>
-                        <input
-                            className={errors.password ? `${css.input} ${css.inputError}` : css.input}
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder="Enter your password"
-                            {...register('password')}
-                        />
-                        <button
-                            type="button"
-                            className={css.eyeBtn}
-                            onClick={() => setShowPassword((v) => !v)}
-                            tabIndex={-1}
-                            aria-label="Toggle password visibility"
-                        >
-                            {showPassword ? <FiEye size={18} /> : <FiEyeOff size={18} />}
-                        </button>
-                    </div>
+                <div className={css.fieldWrap}>
+                    <label htmlFor="signin-password" className="visually-hidden">
+                        Password
+                    </label>
+                    <input
+                        id="signin-password"
+                        className={errors.password ? `${css.input} ${css.inputError}` : css.input}
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Password"
+                        {...register('password')}
+                    />
+                    <button
+                        type="button"
+                        className={css.eyeBtn}
+                        onClick={() => setShowPassword((v) => !v)}
+                        aria-label="Toggle password visibility"
+                    >
+                        {showPassword ? <FiEye size={24} /> : <FiEyeOff size={24} />}
+                    </button>
                     {errors.password && <p className={css.error}>{errors.password.message}</p>}
                 </div>
 
-                <button type="submit" className={css.submitBtn}>
-                    Sign In
+                <button
+                    type="submit"
+                    className={css.submitBtn}
+                    disabled={!isValid || isSubmitting}
+                >
+                    SIGN IN
                 </button>
             </form>
+            <p className={css.metaText}>
+                Don&apos;t have an account?
+                <button
+                    type="button"
+                    className={css.switchBtn}
+                    onClick={onCreateAccount}
+                >
+                    Create an account
+                </button>
+            </p>
         </div>
     );
 }

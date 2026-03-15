@@ -20,7 +20,6 @@ const HomePage = lazy(() => import('./pages/HomePage/HomePage.jsx'));
 const SignInPage = lazy(() => import('./pages/SignInPage/SignInPage.jsx'));
 const SignUpPage = lazy(() => import('./pages/SignUpPage/SignUpPage.jsx'));
 const PrivatPage = lazy(() => import('./pages/PrivatPage/PrivatPage.jsx'));
-const LogOutPage = lazy(() => import('./pages/LogOutPage/LogOutPage.jsx'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage/ErrorPage.jsx'));
 
 export default function App() {
@@ -57,8 +56,6 @@ export default function App() {
                         path="/privatpage"
                         element={<PrivateRoute redirectTo="/signin" component={<PrivatPage />} />}
                     />
-
-                    <Route path="/logout" element={<PrivateRoute redirectTo="/signin" component={<LogOutPage />} />} />
 
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>

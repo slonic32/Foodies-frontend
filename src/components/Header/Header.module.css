@@ -71,15 +71,17 @@
     font-size: 14px;
     font-weight: 600;
     color: #fff;
-    text-decoration: none;
+    border: none;
     padding: 8px 20px;
     border-radius: 30px;
-    background: rgba(255, 255, 255, 0.1);
+    background: #1a1a1a;
     transition: background 0.2s;
+    white-space: nowrap;
+    cursor: pointer;
 }
 
 .userBtn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: #333;
 }
 
 @media screen and (min-width: 768px) {
