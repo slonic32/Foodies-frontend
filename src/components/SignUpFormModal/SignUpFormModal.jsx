@@ -15,7 +15,7 @@ const schema = Yup.object().shape({
         .required('Name is required'),
     email: Yup.string().email('Invalid email address').required('Email is required'),
     password: Yup.string()
-        .min(7, 'Password must be at least 7 characters')
+        .min(8, 'Password must be at least 8 characters')
         .required('Password is required'),
 });
 
@@ -58,10 +58,12 @@ export default function SignUpFormModal({ onClose, onSignIn }) {
                 }}
             >
                 {({ errors, submitCount, isSubmitting, values }) => {
-                    const isFilled =
-                        values.name.trim() &&
-                        values.email.trim() &&
-                        values.password.trim();
+                    const normalizedValues = {
+                        name: values.name.trim(),
+                        email: values.email.trim(),
+                        password: values.password,
+                    };
+                    const isFormValid = schema.isValidSync(normalizedValues);
 
                     return (
                         <Form className={css.form} noValidate>
@@ -119,7 +121,7 @@ export default function SignUpFormModal({ onClose, onSignIn }) {
                             <button
                                 type="submit"
                                 className={css.submitBtn}
-                                disabled={!isFilled || isSubmitting}
+                                disabled={!isFormValid || isSubmitting}
                             >
                                 CREATE
                             </button>

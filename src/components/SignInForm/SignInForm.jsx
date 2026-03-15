@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 
 const signInValidationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email address').required('Email is required'),
-    password: Yup.string().min(7, 'Password must be at least 7 characters long').required('Password is required'),
+    password: Yup.string().min(8, 'Password must be at least 8 characters long').required('Password is required'),
 });
 
 export default function SignInForm() {
@@ -22,10 +22,10 @@ export default function SignInForm() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
-        getValues,
+        formState: { errors, isValid, isSubmitting },
     } = useForm({
         resolver: yupResolver(signInValidationSchema),
+        mode: 'onChange',
     });
 
     const onSubmit = (data) => {
@@ -74,7 +74,11 @@ export default function SignInForm() {
                         {errors.password && <p className={css.error}>{errors.password.message}</p>}
                     </div>
 
-                    <button type="submit" className={css.button}>
+                    <button
+                        type="submit"
+                        className={css.button}
+                        disabled={!isValid || isSubmitting}
+                    >
                         Sign In
                     </button>
 
