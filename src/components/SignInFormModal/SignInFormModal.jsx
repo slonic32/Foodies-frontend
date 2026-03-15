@@ -51,6 +51,7 @@ export default function SignInFormModal({ onClose, onCreateAccount }) {
                         className={errors.email ? `${css.input} ${css.inputError}` : css.input}
                         type="email"
                         placeholder="Email*"
+                        aria-label="Email"
                         {...register('email')}
                     />
                     {errors.email && <p className={css.error}>{errors.email.message}</p>}
