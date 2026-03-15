@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Header from '../../components/Header/Header';
 import Hero from '../../components/Hero/Hero';
+import LogOutModal from '../../components/LogOutModal/LogOutModal';
 import SignInModal from '../../components/SignInModal/SignInModal';
 import SignUpModal from '../../components/SignUpModal/SignUpModal';
 import MainTitle from '../../components/MainTitle/MainTitle';
@@ -13,19 +14,29 @@ import css from './HomePage.module.css';
 function HomePage() {
     const [isSignInOpen, setIsSignInOpen] = useState(false);
     const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+    const [isLogOutOpen, setIsLogOutOpen] = useState(false);
 
     const openSignInModal = () => {
+        setIsLogOutOpen(false);
         setIsSignUpOpen(false);
         setIsSignInOpen(true);
     };
 
     const openSignUpModal = () => {
+        setIsLogOutOpen(false);
         setIsSignInOpen(false);
         setIsSignUpOpen(true);
     };
 
+    const openLogOutModal = () => {
+        setIsSignInOpen(false);
+        setIsSignUpOpen(false);
+        setIsLogOutOpen(true);
+    };
+
     const closeSignInModal = () => setIsSignInOpen(false);
     const closeSignUpModal = () => setIsSignUpOpen(false);
+    const closeLogOutModal = () => setIsLogOutOpen(false);
 
     return (
         <div className={css.page}>
@@ -34,6 +45,7 @@ function HomePage() {
                 <Header
                     onSignInClick={openSignInModal}
                     onSignUpClick={openSignUpModal}
+                    onLogOutClick={openLogOutModal}
                 />
                 <Hero onAddRecipeClick={openSignInModal} />
             </div>
@@ -66,6 +78,9 @@ function HomePage() {
                     onClose={closeSignUpModal}
                     onSignIn={openSignInModal}
                 />
+            )}
+            {isLogOutOpen && (
+                <LogOutModal onClose={closeLogOutModal} />
             )}
         </div>
     );

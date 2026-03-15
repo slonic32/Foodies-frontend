@@ -42,7 +42,7 @@ export function setAuthHeader(token) {
 }
 
 // remove JWT
-function clearAuthHeader() {
+export function clearAuthHeader() {
     axios.defaults.headers.common.Authorization = '';
 }
 

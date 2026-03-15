@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import css from './Header.module.css';
 
-export default function Header({ onSignInClick, onSignUpClick }) {
+export default function Header({ onSignInClick, onSignUpClick, onLogOutClick }) {
     const { isLoggedIn, user } = useAuth();
 
     return (
@@ -13,9 +13,13 @@ export default function Header({ onSignInClick, onSignUpClick }) {
 
             <nav className={css.nav}>
                 {isLoggedIn ? (
-                    <NavLink to="/logout" className={css.userBtn}>
+                    <button
+                        type="button"
+                        className={css.userBtn}
+                        onClick={onLogOutClick}
+                    >
                         {user?.name || 'Profile'}
-                    </NavLink>
+                    </button>
                 ) : (
                     <>
                         <button
