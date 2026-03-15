@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Header from '../../components/Header/Header';
 import Hero from '../../components/Hero/Hero';
 import SignInModal from '../../components/SignInModal/SignInModal';
+import SignUpModal from '../../components/SignUpModal/SignUpModal';
 import MainTitle from '../../components/MainTitle/MainTitle';
 import Subtitle from '../../components/Subtitle/Subtitle';
 import CategoryList from '../../components/CategoryList/CategoryList';
@@ -13,15 +14,28 @@ function HomePage() {
     const [isSignInOpen, setIsSignInOpen] = useState(false);
     const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
+    const openSignInModal = () => {
+        setIsSignUpOpen(false);
+        setIsSignInOpen(true);
+    };
+
+    const openSignUpModal = () => {
+        setIsSignInOpen(false);
+        setIsSignUpOpen(true);
+    };
+
+    const closeSignInModal = () => setIsSignInOpen(false);
+    const closeSignUpModal = () => setIsSignUpOpen(false);
+
     return (
         <div className={css.page}>
             {/* ── Black hero block ────────────────────────── */}
             <div className={css.heroBlock}>
                 <Header
-                    onSignInClick={() => setIsSignInOpen(true)}
-                    onSignUpClick={() => setIsSignUpOpen(true)}
+                    onSignInClick={openSignInModal}
+                    onSignUpClick={openSignUpModal}
                 />
-                <Hero onAddRecipeClick={() => setIsSignInOpen(true)} />
+                <Hero onAddRecipeClick={openSignInModal} />
             </div>
 
             {/* ── Categories section ──────────────────────── */}
@@ -42,10 +56,16 @@ function HomePage() {
 
             {/* ── Modals ──────────────────────────────────── */}
             {isSignInOpen && (
-                <SignInModal onClose={() => setIsSignInOpen(false)} />
+                <SignInModal
+                    onClose={closeSignInModal}
+                    onCreateAccount={openSignUpModal}
+                />
             )}
             {isSignUpOpen && (
-                <SignInModal onClose={() => setIsSignUpOpen(false)} />
+                <SignUpModal
+                    onClose={closeSignUpModal}
+                    onSignIn={openSignInModal}
+                />
             )}
         </div>
     );
