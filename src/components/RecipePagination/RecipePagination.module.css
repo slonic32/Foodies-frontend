@@ -3,69 +3,44 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
     margin-top: 40px;
     padding: 20px 0;
-}
-
-/* Navigation Button */
-.navBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    background-color: transparent;
-    color: #ffffff;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.navBtn:hover:not(:disabled) {
-    background-color: #8bab5c;
-    border-color: #8bab5c;
-    color: #1a1a1a;
-}
-
-.navBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 /* Page Numbers Container */
 .pageNumbers {
     display: flex;
-    gap: 8px;
+    gap: 24px;
     align-items: center;
 }
 
 /* Page Button */
 .pageBtn {
-    min-width: 40px;
-    height: 40px;
-    padding: 0 8px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
+    min-width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1.5px solid transparent;
+    border-radius: 50%;
     background-color: transparent;
-    color: #ffffff;
-    font-size: 14px;
+    color: #1a1a1a;
+    font-size: 16px;
     font-weight: 500;
     font-family: 'Mulish', sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .pageBtn:hover {
-    border-color: #8bab5c;
-    background-color: rgba(139, 171, 92, 0.1);
+    border-color: #c0c0c0;
 }
 
 /* Active Page Button */
 .pageBtn.active {
-    background-color: #8bab5c;
-    border-color: #8bab5c;
+    border-color: #1a1a1a;
+    background-color: transparent;
     color: #1a1a1a;
     font-weight: 600;
 }
@@ -73,32 +48,28 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .pagination {
-        gap: 12px;
         margin-top: 30px;
-        flex-wrap: wrap;
-    }
-
-    .navBtn,
-    .pageBtn {
-        width: 36px;
-        height: 36px;
-        font-size: 13px;
     }
 
     .pageNumbers {
-        gap: 6px;
+        gap: 20px;
+    }
+
+    .pageBtn {
+        min-width: 38px;
+        height: 38px;
+        font-size: 15px;
     }
 }
 
 @media (max-width: 480px) {
-    .pagination {
-        gap: 10px;
+    .pageNumbers {
+        gap: 16px;
     }
 
-    .navBtn,
     .pageBtn {
-        width: 32px;
-        height: 32px;
-        font-size: 12px;
+        min-width: 34px;
+        height: 34px;
+        font-size: 14px;
     }
 }

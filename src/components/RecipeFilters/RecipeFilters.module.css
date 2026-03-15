@@ -6,8 +6,17 @@
     margin-bottom: 40px;
 }
 
-/* Select Dropdown */
-.select {
+/* Dropdown wrapper */
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+
+/* Toggle button (the pill-shaped select trigger) */
+.dropdownToggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
     padding: 16px 20px;
     border: 1px solid #BFBEBE;
@@ -17,33 +26,109 @@
     font-size: 16px;
     font-family: 'Mulish', sans-serif;
     cursor: pointer;
-    transition: all 0.3s ease;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10l5 5 5-5' stroke='%23BFBEBE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 20px center;
-    background-size: 20px;
-    padding-right: 50px;
+    transition: border-color 0.3s ease, color 0.3s ease;
+    outline: none;
+    text-align: left;
 }
 
-.select::placeholder {
-    color: #BFBEBE;
+.dropdownToggle:hover {
+    border-color: #999;
 }
 
-.select:hover {
+.dropdownToggle.open {
     border-color: #BFBEBE;
 }
 
-.select:focus {
-    outline: none;
-    border-color: #8bab5c;
-    color: #BFBEBE;
+.dropdownToggle.hasValue {
+    color: #2f2f2f;
 }
 
-.select option {
-    background-color: #1a1a1a;
-    color: #1a1a1a;
-    padding: 12px;
+/* Label text inside the toggle */
+.dropdownLabel {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Chevron icon */
+.chevron {
+    flex-shrink: 0;
+    margin-left: 12px;
+    transition: transform 0.3s ease;
+    color: #050505;
+}
+
+.chevronOpen {
+    transform: rotate(180deg);
+}
+
+/* Dropdown menu (the list that appears on click) */
+.dropdownMenu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 12px 0;
+    margin: 0;
+    list-style: none;
+    z-index: 100;
+    max-height: 300px;
+    overflow-y: auto;
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scrollbar styling */
+.dropdownMenu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdownMenu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dropdownMenu::-webkit-scrollbar-thumb {
+    background-color: #BFBEBE;
+    border-radius: 3px;
+}
+
+/* Each item in the dropdown */
+.dropdownItem {
+    display: block;
+    width: 100%;
+    padding: 12px 24px;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 16px;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 500;
+    color: #2f2f2f;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.dropdownItem:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdownItem.activeItem {
+    font-weight: 700;
+    color: #2f2f2f;
 }
 
 /* Responsive Design */
@@ -53,10 +138,18 @@
         margin-bottom: 30px;
     }
 
-    .select {
+    .dropdownToggle {
         padding: 14px 18px;
         font-size: 14px;
-        padding-right: 45px;
+    }
+
+    .dropdownItem {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .dropdownMenu {
+        border-radius: 16px;
     }
 }
 
@@ -65,9 +158,18 @@
         gap: 12px;
     }
 
-    .select {
+    .dropdownToggle {
         padding: 12px 16px;
         font-size: 13px;
-        padding-right: 40px;
+    }
+
+    .dropdownItem {
+        padding: 10px 18px;
+        font-size: 13px;
+    }
+
+    .dropdownMenu {
+        max-height: 250px;
+        border-radius: 14px;
     }
 }
