@@ -110,7 +110,6 @@ export default function SignUpFormModal({ onClose, onSignIn }) {
                                     type="button"
                                     className={css.eyeBtn}
                                     onClick={() => setShowPassword((prevState) => !prevState)}
-                                    tabIndex={-1}
                                     aria-label="Toggle password visibility"
                                 >
                                     {showPassword ? <FiEye size={24} /> : <FiEyeOff size={24} />}
