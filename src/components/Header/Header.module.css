@@ -1,107 +1,92 @@
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
+    padding: 16px 16px 0;
     width: 100%;
     box-sizing: border-box;
 }
 
+.container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
 .logo {
-    font-family: 'Mulish', sans-serif;
-    font-size: 18px;
-    font-weight: 800;
-    color: #fff;
-    text-decoration: none;
-    letter-spacing: 0.04em;
-    text-transform: lowercase;
+    display: flex;
+    align-items: center;
 }
 
 .nav {
+    display: none;
+}
+
+.actions {
     display: flex;
     align-items: center;
-    gap: 0;
-    background-color: #ffffff;
-    border-radius: 30px;
-    padding: 1px;
+    gap: 12px;
 }
 
-.signInBtn {
-    font-family: 'Mulish', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    color: #1c1c1c;
-    background: transparent;
-    border: none;
-    border-radius: 30px;
-    padding: 9px 21px;
-    height: 38px;
-    cursor: pointer;
-    transition: background 0.2s;
-    white-space: nowrap;
+.desktopNav {
+    display: none;
 }
 
-.signInBtn:hover {
-    background: rgba(0, 0, 0, 0.06);
+.mobileActions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.signUpBtn {
-    font-family: 'Mulish', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    color: #fff;
-    background-color: #1A1A1A;
-    border: none;
-    border-radius: 30px;
-    padding: 9px 21px;
-    height: 38px;
-    cursor: pointer;
-    transition: background 0.2s;
-    white-space: nowrap;
-}
-
-.signUpBtn:hover {
-    background-color: #333;
-}
-
-.userBtn {
-    font-family: 'Mulish', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 30px;
-    background: #1a1a1a;
-    transition: background 0.2s;
-    white-space: nowrap;
-    cursor: pointer;
-}
-
-.userBtn:hover {
-    background: #333;
+.burgerWrapper {
+    display: flex;
+    align-items: center;
 }
 
 @media screen and (min-width: 768px) {
     .header {
-        padding: 20px 32px;
+        padding: 20px 32px 0;
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
     }
 
     .logo {
-        font-size: 22px;
+        justify-self: start;
     }
 
-    .signInBtn,
-    .signUpBtn {
-        font-size: 14px;
-        padding: 9px 24px;
+    .nav {
+        display: flex;
+        justify-self: center;
+    }
+
+    .desktopNav {
+        display: flex;
+        align-items: center;
+    }
+
+    .actions {
+        justify-self: end;
+        align-items: flex-start;
+    }
+
+    .mobileActions {
+        gap: 16px;
+    }
+
+    .burgerWrapper {
+        display: none;
     }
 }
 
 @media screen and (min-width: 1440px) {
     .header {
-        padding: 24px 60px;
+        padding: 24px 60px 0;
+    }
+
+    .mobileActions {
+        gap: 20px;
     }
 }

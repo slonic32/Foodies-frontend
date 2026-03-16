@@ -1,0 +1,60 @@
+.wrapper {
+    position: relative;
+}
+
+.userBtn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 32px;
+    padding: 7px 6px;
+    border: none;
+    border-radius: 30px;
+    background-color: #1a1a1a;
+    color: #fff;
+    cursor: pointer;
+}
+
+.avatar {
+    display: block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.userName {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding-left: 4px;
+}
+
+.arrow {
+    display: block;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.arrowOpen {
+    transform: rotate(180deg);
+}
+
+@media screen and (min-width: 768px) {
+    .userBtn {
+        height: 50px;
+        padding: 6px 14px 6px 6px;
+        gap: 10px;
+    }
+
+    .avatar {
+        width: 50px;
+        height: 50px;
+    }
+
+}
