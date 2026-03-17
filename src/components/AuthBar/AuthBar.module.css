@@ -1,0 +1,48 @@
+.authBar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background-color: #ffffff;
+    border-radius: 30px;
+    padding: 1px;
+}
+
+.signInBtn {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.24px;
+    line-height: 1.5;
+    color: #050505;
+    background: transparent;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.signUpBtn {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.24px;
+    line-height: 1.5;
+    color: #fff;
+    background-color: #1a1a1a;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+@media screen and (min-width: 768px) {
+
+    .signInBtn{
+            padding: 14px 30px;
+        }
+    .signUpBtn {
+        padding: 14px 28px;
+    }
+}

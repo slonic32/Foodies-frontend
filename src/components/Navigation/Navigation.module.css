@@ -1,0 +1,43 @@
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.mobileNav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.link {
+    text-decoration: none;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.43;
+    letter-spacing: -0.28px;
+    text-transform: uppercase;
+    padding: 14px;
+}
+
+.active {
+    padding: 14px 28px;
+    border: 1px solid #fff;
+    border-radius: 999px;
+}
+
+@media screen and (min-width: 768px) {
+    .nav {
+        gap: 40px;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+
+
+    .active {
+        padding: 12px 24px;
+    }
+}
