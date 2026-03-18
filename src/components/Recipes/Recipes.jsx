@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRecipesByCategory } from '../../redux/recipes/operations';
 import { selectRecipes, selectIsLoading, selectError } from '../../redux/recipes/selectors';
+import { selectCurrentPage, selectTotalRecipes } from '../../redux/pagination/selectors';
+import { setPagination } from '../../redux/pagination/slice';
 import MainTitle from '../MainTitle/MainTitle';
 import Subtitle from '../Subtitle/Subtitle';
 import RecipeFilters from '../RecipeFilters/RecipeFilters';
@@ -15,8 +17,8 @@ function Recipes({ category, onBack }) {
     const recipes = useSelector(selectRecipes);
     const isLoading = useSelector(selectIsLoading);
     const error = useSelector(selectError);
-    
-    const [currentPage, setCurrentPage] = useState(1);
+    const currentPage = useSelector(selectCurrentPage);
+    const totalRecipes = useSelector(selectTotalRecipes);
 
     // Format category name (e.g., 'beef' -> 'Beef')
     const categoryDisplay = category
@@ -25,20 +27,36 @@ function Recipes({ category, onBack }) {
             : category.name
         : 'All Categories';
 
+    const categoryId = category?.id || 'all';
+
     useEffect(() => {
-        if (category && category.id && category.id !== 'all') {
-            dispatch(fetchRecipesByCategory({ categoryId: category.id }));
-        } else {
-            dispatch(fetchRecipesByCategory({ categoryId: 'all' }));
-        }
-    }, [category, dispatch]);
+        const fetchData = async () => {
+            const result = await dispatch(fetchRecipesByCategory({ categoryId, page: 1, limit: 12 }));
+            if (result.payload?.pagination) {
+                dispatch(setPagination(result.payload.pagination));
+            }
+        };
+        fetchData();
+    }, [categoryId, dispatch]);
 
     const handleFilterChange = () => {
-        setCurrentPage(1);
+        const fetchData = async () => {
+            const result = await dispatch(fetchRecipesByCategory({ categoryId, page: 1, limit: 12 }));
+            if (result.payload?.pagination) {
+                dispatch(setPagination(result.payload.pagination));
+            }
+        };
+        fetchData();
     };
 
     const handlePageChange = (page) => {
-        setCurrentPage(page);
+        const fetchData = async () => {
+            const result = await dispatch(fetchRecipesByCategory({ categoryId, page, limit: 12 }));
+            if (result.payload?.pagination) {
+                dispatch(setPagination(result.payload.pagination));
+            }
+        };
+        fetchData();
     };
 
     return (
@@ -49,14 +67,9 @@ function Recipes({ category, onBack }) {
                 onClick={onBack}
                 aria-label="Back to categories"
             >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path 
-                        d="M15 18L9 12L15 6" 
-                        stroke="currentColor" 
-                        strokeWidth="2" 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round"
-                    />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.7136 8.00058L3.28549 7.99956" stroke="#050505" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M7.99902 12.7141L3.28549 7.99956L8.00004 3.28602" stroke="#050505" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 BACK
             </button>
@@ -79,7 +92,7 @@ function Recipes({ category, onBack }) {
             {/* Pagination */}
             <RecipePagination 
                 currentPage={currentPage}
-                totalRecipes={recipes.length}
+                totalRecipes={totalRecipes}
                 onPageChange={handlePageChange}
             />
         </div>

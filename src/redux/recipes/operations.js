@@ -10,7 +10,10 @@ export const fetchRecipesByCategory = createAsyncThunk(
                 params.category = categoryId;
             }
             const response = await axios.get('http://localhost:3000/api/recipes', { params });
-            return response.data.data.recipes;
+            return {
+                recipes: response.data.data.recipes,
+                pagination: response.data.data.meta,
+            };
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
         }
@@ -34,7 +37,10 @@ export const fetchRecipesByFilters = createAsyncThunk(
     async (filters = {}, thunkAPI) => {
         try {
             const response = await axios.get('http://localhost:3000/api/recipes', { params: filters });
-            return response.data.data.recipes;
+            return {
+                recipes: response.data.data.recipes,
+                pagination: response.data.data.meta,
+            };
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
         }
