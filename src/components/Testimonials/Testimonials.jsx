@@ -1,65 +1,129 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../Loader/Loader';
 import quoteIcon from '../../assets/quote.svg';
 import css from './Testimonials.module.css';
 
-const testimonialsData = [
-    {
-        id: 1,
-        text: 'Thank you for the wonderful recipe for feta pasta with tomatoes and basil. It turned out to be not only tasty, but also incredibly colorful. This has become a favorite family meal!',
-        author: 'LARRY PAGEIM',
-    },
-    {
-        id: 2,
-        text: 'The chocolate lava cake recipe was absolutely divine! My family couldn\'t stop raving about it. The instructions were clear and easy to follow, even for a beginner baker like me. Highly recommended!',
-        author: 'SARAH JOHNSON',
-    },
-    {
-        id: 3,
-        text: 'I made the grilled salmon with lemon butter sauce last weekend and it was a huge hit at our dinner party. All my guests asked for the recipe. Your culinary guide has truly transformed my cooking skills!',
-        author: 'MICHAEL CHEN',
-    },
-];
+import { fetchTestimonials } from '../../redux/testimonials/operations';
+import {
+    selectTestimonials,
+    selectTestimonialsError,
+    selectTestimonialsLoading,
+} from '../../redux/testimonials/selectors';
 
-function Testimonials() {
+const AUTOPLAY_DELAY = 7000;
+const FADE_DELAY = 200;
+
+export default function Testimonials() {
+    const dispatch = useDispatch();
+
+    const testimonials = useSelector(selectTestimonials);
+    const isLoading = useSelector(selectTestimonialsLoading);
+    const error = useSelector(selectTestimonialsError);
+
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [isVisible, setIsVisible] = useState(true);
+
+    const timeoutRef = useRef(null);
+
+    useEffect(() => {
+        dispatch(fetchTestimonials());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (testimonials.length <= 1) return;
+
+        const intervalId = setInterval(() => {
+            setIsVisible(false);
+
+            timeoutRef.current = setTimeout(() => {
+                setCurrentSlide((prev) => (prev + 1) % testimonials.length);
+                setIsVisible(true);
+            }, FADE_DELAY);
+        }, AUTOPLAY_DELAY);
+
+        return () => {
+            clearInterval(intervalId);
+            clearTimeout(timeoutRef.current);
+        };
+    }, [testimonials.length]);
 
     const handleDotClick = (index) => {
-        setCurrentSlide(index);
+        if (index === currentSlide) return;
+
+        clearTimeout(timeoutRef.current);
+        setIsVisible(false);
+
+        timeoutRef.current = setTimeout(() => {
+            setCurrentSlide(index);
+            setIsVisible(true);
+        }, FADE_DELAY);
     };
 
-    const currentTestimonial = testimonialsData[currentSlide];
+    if (isLoading && testimonials.length === 0) {
+        return (
+            <section className={css.section}>
+                <div className={css.container}>
+                    <p className={css.subtitle}>What our customer say</p>
+                    <h2 className={css.title}>testimonials</h2>
+
+                    <div className={css.loaderWrapper}>
+                        <Loader />
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section className={css.section}>
+                <div className={css.container}>
+                    <p className={css.subtitle}>What our customer say</p>
+                    <h2 className={css.title}>testimonials</h2>
+                    <p className={css.errorText}>Failed to load testimonials.</p>
+                </div>
+            </section>
+        );
+    }
+
+    if (testimonials.length === 0) return null;
+
+    const safeIndex = currentSlide % testimonials.length;
+    const currentTestimonial = testimonials[safeIndex];
+    const testimonialText = currentTestimonial.testimonial || currentTestimonial.text || '';
+    const authorName = currentTestimonial.ownerName || currentTestimonial.author || 'Anonymous';
 
     return (
         <section className={css.section}>
             <div className={css.container}>
-                <h2 className={css.subtitle}>What our customer say</h2>
-                <h3 className={css.title}>TESTIMONIALS</h3>
+                <p className={css.subtitle}>What our customer say</p>
+                <h2 className={css.title}>testimonials</h2>
 
-                <div className={css.sliderWrapper}>
+                <div className={`${css.sliderWrapper} ${isVisible ? css.fadeIn : css.fadeOut}`}>
                     <div className={css.quoteIcon}>
-                        <img src={quoteIcon} alt="Quote icon" />
+                        <img src={quoteIcon} alt="" aria-hidden="true" />
                     </div>
 
-                    <p className={css.testimonialText}>{currentTestimonial.text}</p>
+                    <p className={css.testimonialText}>{testimonialText}</p>
 
-                    <h4 className={css.authorName}>{currentTestimonial.author}</h4>
+                    <p className={css.authorName}>{authorName}</p>
+                </div>
 
+                {testimonials.length > 1 && (
                     <div className={css.dotsContainer}>
-                        {testimonialsData.map((_, index) => (
+                        {testimonials.map((item, index) => (
                             <button
-                                key={index}
-                                className={`${css.dot} ${
-                                    index === currentSlide ? css.activeDot : ''
-                                }`}
+                                key={item.id ?? item._id ?? index}
+                                type="button"
+                                className={`${css.dot} ${index === safeIndex ? css.activeDot : ''}`}
                                 onClick={() => handleDotClick(index)}
-                                aria-label={`Go to slide ${index + 1}`}
+                                aria-label={`Go to testimonial ${index + 1}`}
                             />
                         ))}
                     </div>
-                </div>
+                )}
             </div>
         </section>
     );
 }
-
-export default Testimonials;

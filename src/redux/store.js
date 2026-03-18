@@ -3,6 +3,7 @@ import { authReducer } from './auth/slice';
 import { categoriesReducer } from './categories/slice';
 import { recipesReducer } from './recipes/slice';
 import { filtersReducer } from './filters/slice';
+import { testimonialsReducer } from './testimonials/slice';
 
 import { persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 
@@ -10,9 +11,10 @@ export const resetStore = createAction('app/resetStore');
 
 const appReducer = combineReducers({
     auth: authReducer,
-  categories: categoriesReducer,
-        recipes: recipesReducer,
-        filters: filtersReducer,
+    categories: categoriesReducer,
+    recipes: recipesReducer,
+    filters: filtersReducer,
+    testimonials: testimonialsReducer,
 });
 
 const rootReducer = (state, action) => {
@@ -24,7 +26,6 @@ const rootReducer = (state, action) => {
 };
 
 export const store = configureStore({
-
     reducer: rootReducer,
 
     middleware: (getDefaultMiddleware) =>
