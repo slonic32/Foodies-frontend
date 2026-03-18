@@ -20,14 +20,16 @@ function Recipes({ category, onBack }) {
 
     // Format category name (e.g., 'beef' -> 'Beef')
     const categoryDisplay = category
-        ? category.charAt(0).toUpperCase() + category.slice(1)
+        ? typeof category === 'string' 
+            ? category.charAt(0).toUpperCase() + category.slice(1)
+            : category.name
         : 'All Categories';
 
     useEffect(() => {
-        if (category && category.toLowerCase() !== 'all') {
-            dispatch(fetchRecipesByCategory(category));
+        if (category && category.id && category.id !== 'all') {
+            dispatch(fetchRecipesByCategory({ categoryId: category.id }));
         } else {
-            dispatch(fetchRecipesByCategory(null));
+            dispatch(fetchRecipesByCategory({ categoryId: 'all' }));
         }
     }, [category, dispatch]);
 

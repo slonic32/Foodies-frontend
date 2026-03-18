@@ -40,6 +40,10 @@ function CategoryList({ onSelectCategory }) {
         dispatch(fetchCategories());
     }, [dispatch]);
 
+    const handleSelectCategory = (categoryId, categoryName) => {
+        if (onSelectCategory) onSelectCategory({ id: categoryId, name: categoryName });
+    };
+
     // Map images and filter out categories without an image
     const categories = categoriesFromRedux
         .map((cat) => ({
@@ -52,28 +56,28 @@ function CategoryList({ onSelectCategory }) {
         <ul className={css.list}>
             {categories.map(({ id, name, image }) => (
                 <li key={id} className={css.item}>
-                    <button
-                        className={css.card}
-                        onClick={() => onSelectCategory && onSelectCategory(name)}
-                        type="button"
-                        aria-label={`View recipes for ${name}`}
-                    >
+                    <div className={css.card}>
                         <img src={image} alt={name} className={css.image} />
                         <div className={css.footer}>
                             <span className={css.name}>{name}</span>
-                            <div className={css.arrowBtn} aria-hidden="true">
+                            <button
+                                className={css.arrowBtn}
+                                onClick={() => handleSelectCategory(id, name)}
+                                type="button"
+                                aria-label={`View recipes for ${name}`}
+                            >
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                                     <path d="M7 17L17 7M17 7H7M17 7V17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
-                            </div>
+                            </button>
                         </div>
-                    </button>
+                    </div>
                 </li>
             ))}
             <li className={css.item}>
                 <button
                     className={`${css.card} ${css.allCard}`}
-                    onClick={() => onSelectCategory && onSelectCategory('all')}
+                    onClick={() => handleSelectCategory('all', 'all')}
                     type="button"
                     aria-label="View all recipes"
                 >
