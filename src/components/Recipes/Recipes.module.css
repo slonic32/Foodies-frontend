@@ -10,26 +10,27 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #050505;
-    border: 1px solid #050505;
-    color: #BFBEBE;
+    background: #ffffff;
+    border: 0 solid #ffffff;
+    color: #050505;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    padding: 10px 16px;
+    padding: 0;
     margin-bottom: 30px;
     transition: all 0.3s ease;
     border-radius: 12px;
 }
 
 .backBtn:hover {
-    color: #ffffff;
-    background: #1a1a1a;
+    color: #050505;
+    background: #f5f5f5;
+    border-color: #f5f5f5;
 }
 
 .backBtn svg {
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
 }
 
 /* Title */
