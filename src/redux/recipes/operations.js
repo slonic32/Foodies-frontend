@@ -3,11 +3,17 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchRecipesByCategory = createAsyncThunk(
     'recipes/fetchByCategory',
-    async ({ categoryId, page = 1, limit = 10 } = {}, thunkAPI) => {
+    async ({ categoryId, area, ingredient, page = 1, limit = 10 } = {}, thunkAPI) => {
         try {
             const params = { page, limit };
             if (categoryId && categoryId !== 'all') {
                 params.category = categoryId;
+            }
+            if (area) {
+                params.area = area;
+            }
+            if (ingredient) {
+                params.ingredient = ingredient;
             }
             const response = await axios.get('http://localhost:3000/api/recipes', { params });
             return {
