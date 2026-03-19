@@ -3,6 +3,7 @@ import { authReducer } from './auth/slice';
 import { categoriesReducer } from './categories/slice';
 import { recipesReducer } from './recipes/slice';
 import { filtersReducer } from './filters/slice';
+import { favoritesReducer } from './favorites/favoritesSlice';
 
 import { testimonialsReducer } from './testimonials/slice';
 
@@ -18,6 +19,7 @@ const appReducer = combineReducers({
     categories: categoriesReducer,
     recipes: recipesReducer,
     filters: filtersReducer,
+    favorites: favoritesReducer,
     testimonials: testimonialsReducer,
     pagination: paginationReducer,
 });

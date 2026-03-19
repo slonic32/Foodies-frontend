@@ -21,6 +21,7 @@ const SignInPage = lazy(() => import('./pages/SignInPage/SignInPage.jsx'));
 const SignUpPage = lazy(() => import('./pages/SignUpPage/SignUpPage.jsx'));
 const PrivatPage = lazy(() => import('./pages/PrivatPage/PrivatPage.jsx'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage/ErrorPage.jsx'));
+const RecipePage = lazy(() => import('./components/RecipePage/RecipePage.jsx'));
 
 export default function App() {
     const dispatch = useDispatch();
@@ -56,6 +57,8 @@ export default function App() {
                         path="/privatpage"
                         element={<PrivateRoute redirectTo="/signin" component={<PrivatPage />} />}
                     />
+
+                    <Route path="/recipe/:id" element={<RecipePage />} />
 
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>
