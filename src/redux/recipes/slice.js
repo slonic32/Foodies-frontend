@@ -19,7 +19,7 @@ const recipesSlice = createSlice({
             .addCase(fetchRecipesByCategory.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.error = null;
-                state.items = action.payload;
+                state.items = action.payload.recipes;
             })
             .addCase(fetchRecipesByCategory.rejected, (state, action) => {
                 state.isLoading = false;
@@ -47,7 +47,7 @@ const recipesSlice = createSlice({
             .addCase(fetchRecipesByFilters.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.error = null;
-                state.items = action.payload;
+                state.items = action.payload.recipes;
             })
             .addCase(fetchRecipesByFilters.rejected, (state, action) => {
                 state.isLoading = false;
