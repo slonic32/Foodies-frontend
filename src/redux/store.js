@@ -3,6 +3,7 @@ import { authReducer } from './auth/slice';
 import { categoriesReducer } from './categories/slice';
 import { recipesReducer } from './recipes/slice';
 import { filtersReducer } from './filters/slice';
+import { usersReducer } from './users/slice';
 import { favoritesReducer } from './favorites/favoritesSlice';
 
 import { testimonialsReducer } from './testimonials/slice';
@@ -16,6 +17,7 @@ export const resetStore = createAction('app/resetStore');
 
 const appReducer = combineReducers({
     auth: authReducer,
+    users: usersReducer,
     categories: categoriesReducer,
     recipes: recipesReducer,
     filters: filtersReducer,
