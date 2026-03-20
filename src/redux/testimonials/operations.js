@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const fetchTestimonials = createAsyncThunk('testimonials/fetchAll', async (_, thunkAPI) => {
     try {
-        const { data } = await axios.get('http://localhost:3000/api/testimonials');
+        const { data } = await axios.get('http://foodies-backend-rmi4.onrender.com/api/testimonials');
 
         return data?.data || data || [];
     } catch (error) {
