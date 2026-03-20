@@ -15,7 +15,7 @@ export const fetchRecipesByCategory = createAsyncThunk(
             if (ingredient) {
                 params.ingredient = ingredient;
             }
-            const response = await axios.get('http://foodies-backend-rmi4.onrender.com/api/recipes', { params });
+            const response = await axios.get('https://foodies-backend-rmi4.onrender.com/api/recipes', { params });
             return {
                 recipes: response.data.data.recipes,
                 pagination: response.data.data.meta,
@@ -30,7 +30,7 @@ export const fetchRecipeById = createAsyncThunk(
     'recipes/fetchById',
     async (id, thunkAPI) => {
         try {
-            const response = await axios.get(`http://foodies-backend-rmi4.onrender.com/api/recipes/${id}`);
+            const response = await axios.get(`https://foodies-backend-rmi4.onrender.com/api/recipes/${id}`);
             return response.data.data.recipes;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
@@ -42,7 +42,7 @@ export const fetchRecipesByFilters = createAsyncThunk(
     'recipes/fetchByFilters',
     async (filters = {}, thunkAPI) => {
         try {
-            const response = await axios.get('http://foodies-backend-rmi4.onrender.com/api/recipes', { params: filters });
+            const response = await axios.get('https://foodies-backend-rmi4.onrender.com/api/recipes', { params: filters });
             return {
                 recipes: response.data.data.recipes,
                 pagination: response.data.data.meta,
