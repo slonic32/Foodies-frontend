@@ -15,7 +15,7 @@ export const fetchRecipesByCategory = createAsyncThunk(
             if (ingredient) {
                 params.ingredient = ingredient;
             }
-            const response = await axios.get('http://localhost:3000/api/recipes', { params });
+            const response = await axios.get('http://foodies-backend-rmi4.onrender.com/api/recipes', { params });
             return {
                 recipes: response.data.data.recipes,
                 pagination: response.data.data.meta,
