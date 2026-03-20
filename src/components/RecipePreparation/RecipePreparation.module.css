@@ -1,0 +1,95 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  font-family: var(--font-family);
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 133%;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--main);
+}
+
+.instructions {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 143%;
+  letter-spacing: -0.02em;
+  color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.favoriteBtn {
+  display: inline-block;
+  border: 1px solid var(--gray);
+  border-radius: 30px;
+  padding: 14px 20px;
+  width: 211px;
+  height: 52px;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 143%;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--main);
+  white-space: nowrap;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.favoriteBtn.active {
+  border: 1px solid var(--gray);
+  border-radius: 30px;
+  padding: 14px 30px;
+  width: auto;
+  height: auto;
+  align-self: flex-start;
+  background: var(--main);
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.favoriteBtn.active:hover {
+  background: transparent;
+  color: #050505;
+}
+
+@media screen and (min-width: 768px) {
+  .title {
+    font-size: 20px;
+    line-height: 120%;
+  }
+
+  .instructions {
+    font-size: 16px;
+    line-height: 150%;
+  }
+
+  .favoriteBtn {
+    padding: 16px 32px;
+    width: auto;
+    height: auto;
+    font-size: 16px;
+    line-height: 150%;
+  }
+
+  .favoriteBtn.active {
+    padding: 16px 32px;
+  }
+}

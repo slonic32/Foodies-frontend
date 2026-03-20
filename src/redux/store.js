@@ -4,6 +4,12 @@ import { categoriesReducer } from './categories/slice';
 import { recipesReducer } from './recipes/slice';
 import { filtersReducer } from './filters/slice';
 import { usersReducer } from './users/slice';
+import { favoritesReducer } from './favorites/favoritesSlice';
+
+import { testimonialsReducer } from './testimonials/slice';
+
+import { paginationReducer } from './pagination/slice';
+
 
 import { persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 
@@ -15,6 +21,9 @@ const appReducer = combineReducers({
     categories: categoriesReducer,
     recipes: recipesReducer,
     filters: filtersReducer,
+    favorites: favoritesReducer,
+    testimonials: testimonialsReducer,
+    pagination: paginationReducer,
 });
 
 const rootReducer = (state, action) => {
