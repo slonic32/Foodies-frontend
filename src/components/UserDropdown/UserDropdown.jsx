@@ -2,9 +2,11 @@ import { NavLink } from 'react-router-dom';
 import css from './UserDropdown.module.css';
 import Icon from '../Icon/Icon';
 
-
 export default function UserDropdown({ user, onLogOutClick, onClose }) {
-    const profileLink = `/user/${user?._id || user?.id}`;
+    const profileLink = `/user/${user?.id || user?._id}`;
+    // const profileId = user?.id || user?._id;
+    // const profileLink = profileId ? `/user/${profileId}` : '/';
+    console.log('USER DROPDOWN', user);
 
     const handleLogout = () => {
         onClose();

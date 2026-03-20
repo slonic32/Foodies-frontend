@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { refresh } from './redux/auth/operations.js';
-import { store } from './redux/store.js';
+// import { store } from './redux/store.js';
 import { useAuth } from './hooks/useAuth.js';
 import { useEffect } from 'react';
 
@@ -27,7 +27,7 @@ export default function App() {
     const { isRefreshing } = useAuth();
 
     useEffect(() => {
-        store.dispatch(refresh());
+        dispatch(refresh());
     }, [dispatch]);
 
     const loading = useSelector(selectLoading);
@@ -42,18 +42,12 @@ export default function App() {
                     {/* HomePage is public – visible to everyone */}
                     <Route path="/" element={<HomePage />} />
 
-                    <Route
-                        path="/signup"
-                        element={<RestrictedRoute redirectTo="/" component={<SignUpPage />} />}
-                    />
+                    <Route path="/signup" element={<RestrictedRoute redirectTo="/" component={<SignUpPage />} />} />
+
+                    <Route path="/signin" element={<RestrictedRoute redirectTo="/" component={<SignInPage />} />} />
 
                     <Route
-                        path="/signin"
-                        element={<RestrictedRoute redirectTo="/" component={<SignInPage />} />}
-                    />
-
-                    <Route
-                        path="/privatpage"
+                        path="/user/:id"
                         element={<PrivateRoute redirectTo="/signin" component={<PrivatPage />} />}
                     />
 

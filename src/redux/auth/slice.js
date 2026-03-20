@@ -14,6 +14,7 @@ function handleRejected(state, action) {
 }
 
 const emptyUser = {
+    id: null,
     name: null,
     email: null,
     avatar: null,
@@ -26,7 +27,7 @@ const authSlice = createSlice({
         token: null,
 
         isLoggedIn: false,
-        isRefreshing: false,
+        isRefreshing: true,
         loading: false,
         error: null,
     },
@@ -45,6 +46,8 @@ const authSlice = createSlice({
         builder
             .addCase(register.fulfilled, (state, action) => {
                 const user = action.payload.user || {};
+
+                state.user.id = user.id ?? user._id ?? null;
                 state.user.name = user.name ?? null;
                 state.user.email = user.email ?? null;
 
@@ -59,6 +62,11 @@ const authSlice = createSlice({
             .addCase(register.pending, handlePending)
             .addCase(register.rejected, handleRejected)
             .addCase(login.fulfilled, (state, action) => {
+                console.log('login payload', action.payload);
+
+                const user = action.payload.user || {};
+
+                state.user.id = user.id ?? user._id ?? null;
                 state.user.name = action.payload.user.name;
                 state.user.email = action.payload.user.email;
 
@@ -88,6 +96,10 @@ const authSlice = createSlice({
                 state.loading = true;
             })
             .addCase(refresh.fulfilled, (state, action) => {
+                console.log('REFRESH ID:', action.payload.id);
+                console.log('REFRESH PAYLOAD FULL:', action.payload);
+
+                state.user.id = action.payload.id ?? action.payload._id ?? null;
                 state.user.name = action.payload.name;
                 state.user.email = action.payload.email;
 
@@ -108,7 +120,8 @@ const authSlice = createSlice({
                 state.isRefreshing = false;
             })
             .addCase(editUser.fulfilled, (state, action) => {
-                state.user.avatar = action.payload.user.avatar;
+                // state.user.avatar = action.payload.user.avatar;
+                state.user.avatar = action.payload.avatar;
 
                 state.error = null;
                 state.loading = false;

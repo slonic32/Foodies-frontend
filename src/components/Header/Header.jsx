@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import css from './Header.module.css';
 import Logo from '../Logo/Logo';
 import AuthBar from '../AuthBar/AuthBar';
@@ -9,14 +9,14 @@ import BurgerButton from '../BurgerButton/BurgerButton';
 import MobileMenu from '../MobileMenu/MobileMenu';
 
 export default function Header({ onSignInClick, onSignUpClick, onLogOutClick }) {
-    // const { isLoggedIn, user } = useAuth();
-    const isLoggedIn = true;
-    const user = {
-        _id: '123',
-        name: 'Victoria',
-        email: 'test@example.com',
-        avatar: '',
-    };
+    const { isLoggedIn, user } = useAuth();
+    // const isLoggedIn = true;
+    // const user = {
+    //     _id: '123',
+    //     name: 'Victoria',
+    //     email: 'test@example.com',
+    //     avatar: '',
+    // };
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
