@@ -62,8 +62,6 @@ const authSlice = createSlice({
             .addCase(register.pending, handlePending)
             .addCase(register.rejected, handleRejected)
             .addCase(login.fulfilled, (state, action) => {
-                console.log('login payload', action.payload);
-
                 const user = action.payload.user || {};
 
                 state.user.id = user.id ?? user._id ?? null;
@@ -96,9 +94,6 @@ const authSlice = createSlice({
                 state.loading = true;
             })
             .addCase(refresh.fulfilled, (state, action) => {
-                console.log('REFRESH ID:', action.payload.id);
-                console.log('REFRESH PAYLOAD FULL:', action.payload);
-
                 state.user.id = action.payload.id ?? action.payload._id ?? null;
                 state.user.name = action.payload.name;
                 state.user.email = action.payload.email;

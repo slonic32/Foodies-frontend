@@ -29,16 +29,7 @@ export default function PrivatPage() {
     const profileId = String(id || '');
     const isOwnProfile = currentUserId === profileId;
 
-    // console.log('PROFILE FROM STORE:', profileUser);
-    // console.log('IS FOLLOWING:', isFollowing);
-
-    // console.log('currentUser FULL:', currentUser);
-    // console.log('currentUserId:', currentUserId);
-    // console.log('profileId:', profileId);
-
     useEffect(() => {
-        console.log('DISPATCH PROFILE FETCH', { id, isOwnProfile });
-
         if (!id || !token || !currentUserId) return;
 
         if (isOwnProfile) {
