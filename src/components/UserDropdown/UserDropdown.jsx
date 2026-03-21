@@ -4,9 +4,6 @@ import Icon from '../Icon/Icon';
 
 export default function UserDropdown({ user, onLogOutClick, onClose }) {
     const profileLink = `/user/${user?.id || user?._id}`;
-    // const profileId = user?.id || user?._id;
-    // const profileLink = profileId ? `/user/${profileId}` : '/';
-    console.log('USER DROPDOWN', user);
 
     const handleLogout = () => {
         onClose();

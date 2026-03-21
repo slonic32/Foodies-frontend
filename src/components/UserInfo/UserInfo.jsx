@@ -5,6 +5,7 @@ import { editUser } from '../../redux/auth/operations';
 import { selectAuthLoading } from '../../redux/auth/selectors';
 import { BACKEND_HOST } from '../../config/backend';
 import defaultAvatar from '../../assets/avatar_default.svg';
+import toast from 'react-hot-toast';
 
 const DEFAULT_AVATAR = defaultAvatar;
 
@@ -48,8 +49,9 @@ export default function UserInfo({ user, isOwnProfile = false }) {
 
         try {
             await dispatch(editUser(formData)).unwrap();
+            toast.success('Avatar updated successfully');
         } catch (error) {
-            console.error(error);
+            toast.error(error?.message || 'Failed to update avatar');
         } finally {
             e.target.value = '';
         }
