@@ -1,14 +1,57 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategories } from '../../redux/categories/operations';
+import { selectCategories } from '../../redux/categories/selectors';
 import css from './CategoryList.module.css';
-import beefImg from '../../assets/category-beef.jpg';
-import porkImg from '../../assets/category-pork.jpg';
 
-const categories = [
-    { id: 1, name: 'Beef', image: beefImg },
-    { id: 2, name: 'Pork', image: porkImg },
-];
+// Import assets
+import beefImg from '../../assets/Beef.jpg';
+import breakfastImg from '../../assets/Breakfast.jpg';
+import dessertsImg from '../../assets/Desserts.jpg';
+import goatImg from '../../assets/Goat.jpg';
+import lambImg from '../../assets/Lamb.jpg';
+import miscellaneousImg from '../../assets/Miscellaneous.jpg';
+import pastaImg from '../../assets/Pasta.jpg';
+import porkImg from '../../assets/Pork.jpg';
+import seafoodImg from '../../assets/Seafood.jpg';
+import sideImg from '../../assets/Side.jpg';
+import starterImg from '../../assets/Starter.jpg';
 
-function CategoryList() {
+const imageMap = {
+    Beef: beefImg,
+    Breakfast: breakfastImg,
+    Dessert: dessertsImg,
+    Desserts: dessertsImg,
+    Goat: goatImg,
+    Lamb: lambImg,
+    Miscellaneous: miscellaneousImg,
+    Pasta: pastaImg,
+    Pork: porkImg,
+    Seafood: seafoodImg,
+    Side: sideImg,
+    Starter: starterImg,
+};
+
+function CategoryList({ onSelectCategory }) {
+    const dispatch = useDispatch();
+    const categoriesFromRedux = useSelector(selectCategories);
+
+    useEffect(() => {
+        dispatch(fetchCategories());
+    }, [dispatch]);
+
+    const handleSelectCategory = (categoryId, categoryName) => {
+        if (onSelectCategory) onSelectCategory({ id: categoryId, name: categoryName });
+    };
+
+    // Map images and filter out categories without an image
+    const categories = categoriesFromRedux
+        .map((cat) => ({
+            ...cat,
+            image: imageMap[cat.name],
+        }))
+        .filter((cat) => cat.image);
+
     return (
         <ul className={css.list}>
             {categories.map(({ id, name, image }) => (
@@ -17,19 +60,29 @@ function CategoryList() {
                         <img src={image} alt={name} className={css.image} />
                         <div className={css.footer}>
                             <span className={css.name}>{name}</span>
-                            <Link to={`/categories/${name.toLowerCase()}`} className={css.arrowBtn} aria-label={`Go to ${name}`}>
+                            <button
+                                className={css.arrowBtn}
+                                onClick={() => handleSelectCategory(id, name)}
+                                type="button"
+                                aria-label={`View recipes for ${name}`}
+                            >
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                                     <path d="M7 17L17 7M17 7H7M17 7V17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </li>
             ))}
             <li className={css.item}>
-                <div className={`${css.card} ${css.allCard}`}>
+                <button
+                    className={`${css.card} ${css.allCard}`}
+                    onClick={() => handleSelectCategory('all', 'all')}
+                    type="button"
+                    aria-label="View all recipes"
+                >
                     <span className={css.allLabel}>ALL CATEGORIES</span>
-                </div>
+                </button>
             </li>
         </ul>
     );

@@ -1,0 +1,154 @@
+/* Recipe Card Container */
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #ffffff;
+    height: 100%;
+}
+
+/* Image Wrapper */
+.imageWrapper {
+    width: 100%;
+    height: 230px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+/* Content */
+.content {
+    padding: 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-grow: 1;
+}
+
+/* Title */
+.title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: #050505;
+    font-family: 'Mulish', sans-serif;
+    line-height: 24px;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+}
+
+/* Description */
+.description {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    font-family: 'Mulish', sans-serif;
+    line-height: 20px;
+    letter-spacing: -0.02em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+/* Author */
+.author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatarWrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: #bfbebe;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatarPlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    font-family: 'Mulish', sans-serif;
+}
+
+.authorName {
+    font-size: 14px;
+    font-weight: 500;
+    color: #050505;
+    font-family: 'Mulish', sans-serif;
+    line-height: 20px;
+    letter-spacing: -0.02em;
+}
+
+/* Actions */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.iconButton {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(5, 5, 5, 0.1);
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 10px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    color: #050505;
+}
+
+.iconButton:hover {
+    background-color: rgba(5, 5, 5, 0.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .title {
+        font-size: 16px;
+        line-height: 22px;
+    }
+
+    .description {
+        font-size: 13px;
+        line-height: 18px;
+    }
+}

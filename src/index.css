@@ -1,13 +1,73 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 :root {
     --main-text: #2f2f2f;
     --main-white: #fff;
     --accent-color: #05CE78;
     --button-hover: #04b86b;
     --dark-bg: #1C1C1C;
+    --main: #050505;
+    --gray: #bfbebe;
+    --white: #fff;
+    --font-family: "Mulish", sans-serif;
+
+    /* Typography — mobile */
+    --mobile-h1-size: 40px;
+    --mobile-h1-weight: 800;
+    --mobile-h1-letter-spacing: -0.8px;
+    --mobile-h1-line-height: 40px;
+
+    --mobile-h2-size: 28px;
+    --mobile-h2-weight: 800;
+    --mobile-h2-letter-spacing: -0.56px;
+    --mobile-h2-line-height: 32px;
+
+    --mobile-h3-size: 18px;
+    --mobile-h3-weight: 800;
+    --mobile-h3-letter-spacing: -0.36px;
+    --mobile-h3-line-height: 24px;
+
+    --mobile-text-size: 14px;
+    --mobile-text-weight: 500;
+    --mobile-text-letter-spacing: -0.28px;
+    --mobile-text-line-height: 20px;
+
+    /* Typography — desktop/tablet */
+    --h1-size: 90px;
+    --h1-weight: 800;
+    --h1-letter-spacing: -1.8px;
+    --h1-line-height: 90px;
+
+    --h1-tablet-size: 70px;
+    --h1-tablet-letter-spacing: -1.4px;
+    --h1-tablet-line-height: 70px;
+
+    --h2-size: 40px;
+    --h2-weight: 800;
+    --h2-letter-spacing: -0.8px;
+    --h2-line-height: 44px;
+
+    --h3-size: 24px;
+    --h3-weight: 800;
+    --h3-letter-spacing: -0.48px;
+    --h3-line-height: 28px;
+
+    --h4-size: 20px;
+    --h4-weight: 800;
+    --h4-letter-spacing: -0.4px;
+    --h4-line-height: 24px;
+
+    --text-size: 16px;
+    --text-weight: 500;
+    --text-letter-spacing: -0.32px;
+    --text-line-height: 24px;
 }
 
 body {
-    background-color: #F8F8F8;
     background-size: auto 100%;
     background-position: center center;
     background-repeat: no-repeat;

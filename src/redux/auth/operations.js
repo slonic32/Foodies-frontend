@@ -4,13 +4,45 @@ import { BACKEND_HOST } from '../../config/backend';
 
 axios.defaults.baseURL = BACKEND_HOST + '/api/';
 
+function getErrorMessage(error) {
+    const responseData = error?.response?.data;
+
+    if (typeof responseData === 'string' && responseData.trim()) {
+        return responseData;
+    }
+
+    if (typeof responseData?.message === 'string' && responseData.message.trim()) {
+        return responseData.message;
+    }
+
+    if (typeof responseData?.msg === 'string' && responseData.msg.trim()) {
+        return responseData.msg;
+    }
+
+    if (Array.isArray(responseData?.errors) && responseData.errors.length > 0) {
+        const firstError = responseData.errors[0];
+        if (typeof firstError === 'string' && firstError.trim()) {
+            return firstError;
+        }
+        if (typeof firstError?.message === 'string' && firstError.message.trim()) {
+            return firstError.message;
+        }
+    }
+
+    if (typeof error?.message === 'string' && error.message.trim()) {
+        return error.message;
+    }
+
+    return 'Something went wrong';
+}
+
 // add JWT
 export function setAuthHeader(token) {
     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 }
 
 // remove JWT
-function clearAuthHeader() {
+export function clearAuthHeader() {
     axios.defaults.headers.common.Authorization = '';
 }
 
@@ -19,10 +51,7 @@ export const register = createAsyncThunk('auth/register', async (credentials, th
         const res = await axios.post('/auth/register', credentials);
         return res.data;
     } catch (error) {
-        if (error.response?.data?.message) {
-            return thunkAPI.rejectWithValue(error.response.data.message);
-        }
-        return thunkAPI.rejectWithValue(error.message);
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
 });
 
@@ -34,10 +63,7 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
 
         return res.data;
     } catch (error) {
-        if (error.response?.data?.message) {
-            return thunkAPI.rejectWithValue(error.response.data.message);
-        }
-        return thunkAPI.rejectWithValue(error.message);
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
 });
 
@@ -46,10 +72,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
         await axios.get('/auth/logout');
         clearAuthHeader();
     } catch (error) {
-        if (error.response?.data?.message) {
-            return thunkAPI.rejectWithValue(error.response.data.message);
-        }
-        return thunkAPI.rejectWithValue(error.message);
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
 });
 
@@ -64,14 +87,11 @@ export const refresh = createAsyncThunk('auth/refresh', async (_, thunkAPI) => {
     try {
         setAuthHeader(persistedToken);
 
-        const res = await axios.get('/auth/current');
+        const res = await axios.get('/users/current');
 
         return res.data;
     } catch (error) {
-        if (error.response?.data?.message) {
-            return thunkAPI.rejectWithValue(error.response.data.message);
-        }
-        return thunkAPI.rejectWithValue(error.message);
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
 });
 
@@ -85,9 +105,6 @@ export const editUser = createAsyncThunk('auth/editUser', async (formData, thunk
 
         return res.data;
     } catch (error) {
-        if (error.response?.data?.message) {
-            return thunkAPI.rejectWithValue(error.response.data.message);
-        }
-        return thunkAPI.rejectWithValue(error.message);
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
 });

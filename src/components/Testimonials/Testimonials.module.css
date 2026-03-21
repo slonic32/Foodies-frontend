@@ -1,7 +1,7 @@
-
 .section {
-    padding: 0 20px;
-    margin-top: 60px;
+    margin-top: 64px;
+    margin-bottom: 80px;
+    padding: 0 16px;
 }
 
 .container {
@@ -9,30 +9,27 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    text-align: center;
 }
 
 .subtitle {
-    font-family: 'Mulish', sans-serif;
+    margin: 0 0 20px;
     font-size: 14px;
-    font-weight: 400;
-    color: #1A1A1A;
-    margin: 0 0 20px 0;
-    letter-spacing: 0.03em;
-    align-self: center;
-    text-align: center;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -0.28px;
+    color: #1a1a1a;
 }
 
 .title {
-    font-family: 'Mulish', sans-serif;
-    font-size: 32px;
+    margin: 0 0 12px;
+    font-size: 28px;
     font-weight: 800;
-    color: #1a1a1a;
-    margin: 0 0 40px 0;
-    letter-spacing: 0.02em;
-    align-self: center;
-    text-align: center;
+    line-height: 1.14;
+    letter-spacing: -0.56px;
+    color: #050505;
+    text-transform: uppercase;
 }
 
 .sliderWrapper {
@@ -40,10 +37,12 @@
     max-width: 800px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .quoteIcon {
-    margin-bottom: 24px;
+    width: 100%;
+    margin-bottom: 20px;
     display: flex;
     justify-content: flex-start;
 }
@@ -51,101 +50,154 @@
 .quoteIcon img {
     width: 40px;
     height: auto;
+    margin-left: 8px;
+
 }
 
 .testimonialText {
-    font-family: 'Mulish', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.6;
-    color: #1a1a1a;
-    margin: 0 0 32px 0;
-    padding: 0;
-    text-align: center;
-    height: 135px;
+    margin: 0 0 32px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.33;
+    letter-spacing: -0.36px;
+    color: #050505;
+    min-height: calc(16px * 1.5 * 8);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 8;
+    overflow: hidden;
 }
 
 .authorName {
-    font-family: 'Mulish', sans-serif;
+    margin: 0 0 40px;
     font-size: 16px;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin: 0 0 32px 0;
-    letter-spacing: 0.04em;
+    font-weight: 800;
+    line-height: 1.5;
+    letter-spacing: -0.32px;
     text-transform: uppercase;
-    text-align: center;
+    color: #050505;
 }
 
 .dotsContainer {
     display: flex;
-    gap: 12px;
     justify-content: center;
-    margin-bottom: 40px;
+    gap: 8px;
 }
 
 .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: #BFBEBE;
+    width: 14px;
+    height: 14px;
+    padding: 0;
     border: none;
+    border-radius: 50%;
+    background-color: #bfbebe;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    padding: 0;
 }
 
-.dot:hover {
+.dot:hover,
+.dot:focus {
     background-color: #a0a0a0;
+}
+
+.dot:focus-visible {
+    outline: 2px solid #050505;
+    outline-offset: 2px;
 }
 
 .activeDot {
     background-color: #050505;
 }
 
-/* ── Tablet ───────────────────────────────────────────── */
+.fadeIn {
+    opacity: 1;
+    transition: opacity 200ms ease-in-out;
+}
+
+.fadeOut {
+    opacity: 0;
+    transition: opacity 200ms ease-in-out;
+}
+
+.loaderWrapper {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.errorText {
+    margin-top: 20px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #1a1a1a;
+}
+
 @media screen and (min-width: 768px) {
     .section {
-        padding: 0 20px;
-        margin-top: 60px;
+        margin-top: 100px;
+        margin-bottom: 100px;
+        padding: 0 32px;
+    }
+
+    .subtitle {
+        font-size: 16px;
     }
 
     .title {
         font-size: 40px;
-        margin-bottom: 48px;
+        margin-bottom: 40px;
     }
 
     .sliderWrapper {
         max-width: 900px;
     }
 
-    .testimonialText {
-        font-size: 18px;
-        padding: 0 40px;
+    .quoteIcon {
         margin-bottom: 40px;
-        height: 155px;
-        text-align: center;
+    }
+
+    .quoteIcon {
+        width: 100%;
+        margin-bottom: 20px;
+
+    }
+
+    .quoteIcon img {
+        width: 59px;
+        height: auto;
+        margin-left: 40px;
+    }
+
+    .dotsContainer {
+        gap: 12px;
+    }
+
+    .dot {
+        width: 16px;
+        height: 16px;
+    }
+
+    .testimonialText {
+        font-size: 24px;
+        min-height: calc(18px * 1.6 * 6);
+        -webkit-line-clamp: 6;
     }
 
     .authorName {
-        font-size: 18px;
-        margin-bottom: 40px;
-    }
-
-    .quoteIcon svg {
-        width: 64px;
+        font-size: 20px;
     }
 }
 
-/* ── Desktop ──────────────────────────────────────────── */
 @media screen and (min-width: 1440px) {
-    .section {
-        padding: 0 20px;
-        margin-top: 60px;
+    .container {
+        max-width: 822px;
     }
 
-    .title {
-        font-size: 48px;
-        margin-bottom: 60px;
+    .section {
+        margin-top: 120px;
+        margin-bottom: 120px;
     }
 
     .sliderWrapper {
@@ -153,12 +205,8 @@
     }
 
     .testimonialText {
-        font-size: 20px;
-        padding: 0 60px;
-        margin-bottom: 48px;
-        line-height: 1.7;
-        height: 170px;
-        text-align: center;
+        min-height: calc(20px * 1.6 * 5);
+        -webkit-line-clamp: 5;
     }
 
     .authorName {

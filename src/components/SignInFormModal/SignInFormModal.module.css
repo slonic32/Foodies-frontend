@@ -1,15 +1,16 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: 0;
 }
 
 .title {
-    font-family: 'Mulish', sans-serif;
-    font-size: 28px;
+    font-family: var(--font-family, 'Mulish', sans-serif);
+    font-size: 40px;
     font-weight: 700;
-    color: #fff;
-    margin: 0 0 28px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: #050505;
+    margin: 0 0 40px;
 }
 
 .form {
@@ -18,95 +19,150 @@
     gap: 16px;
 }
 
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.label {
-    font-family: 'Mulish', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
+.fieldWrap {
+    position: relative;
 }
 
 .input {
-    font-family: 'Mulish', sans-serif;
-    font-size: 14px;
-    color: #fff;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    height: 48px;
-    padding: 0 16px;
+    font-family: var(--font-family, 'Mulish', sans-serif);
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: #2f2f2f;
+    background: transparent;
+    border: 1px solid rgba(47, 47, 47, 0.2);
+    border-radius: 30px;
+    height: 56px;
+    padding: 0 24px;
     width: 100%;
     box-sizing: border-box;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s ease-in-out;
 }
 
 .input::placeholder {
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(47, 47, 47, 0.4);
 }
 
 .input:focus {
     outline: none;
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: #050505;
 }
 
 .inputError {
-    border-color: #ff6b6b;
+    border-color: #e74a3b;
 }
 
-.passwordWrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.passwordWrap .input {
-    padding-right: 44px;
+.passwordField .input {
+    padding-right: 64px;
 }
 
 .eyeBtn {
     position: absolute;
-    right: 12px;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.5);
+    color: #2f2f2f;
     cursor: pointer;
     padding: 0;
     display: flex;
     align-items: center;
-    transition: color 0.2s;
+    opacity: 0.85;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .eyeBtn:hover {
-    color: #fff;
+    opacity: 1;
 }
 
 .error {
-    font-family: 'Mulish', sans-serif;
+    font-family: var(--font-family, 'Mulish', sans-serif);
     font-size: 12px;
-    color: #ff6b6b;
-    margin: 0;
+    color: #e74a3b;
+    margin: 8px 6px 0;
 }
 
 .submitBtn {
-    font-family: 'Mulish', sans-serif;
-    font-size: 14px;
+    font-family: var(--font-family, 'Mulish', sans-serif);
+    font-size: 28px;
     font-weight: 700;
-    letter-spacing: 0.06em;
-    color: #1c1c1c;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: #ffffff;
     border: none;
     border-radius: 30px;
-    height: 50px;
+    height: 56px;
     width: 100%;
-    cursor: pointer;
-    margin-top: 8px;
-    transition: background 0.2s, color 0.2s;
+    margin-top: 16px;
+    transition: background-color 0.2s ease-in-out;
+    background-color: #050505;
 }
 
-.submitBtn:hover {
-    background-color: #e0e0e0;
+.submitBtn:disabled {
+    background-color: #bdbdbd;
+    cursor: not-allowed;
+}
+
+.submitBtn:not(:disabled):hover {
+    background-color: #1a1a1a;
+}
+
+.metaText {
+    font-family: var(--font-family, 'Mulish', sans-serif);
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: rgba(47, 47, 47, 0.5);
+    text-align: center;
+    margin: 16px 0 0;
+}
+
+.switchBtn {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    color: #050505;
+    margin-left: 6px;
+    padding: 0;
+    border: none;
+    background: none;
+    text-decoration: none;
+}
+
+.switchBtn:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 767px) {
+    .title {
+        font-size: 40px;
+        margin-bottom: 32px;
+    }
+
+    .input {
+        height: 50px;
+        padding: 0 16px;
+        font-size: 24px;
+    }
+
+    .fieldWrap .input {
+        padding-right: 56px;
+    }
+
+    .eyeBtn {
+        right: 16px;
+    }
+
+    .submitBtn {
+        height: 50px;
+        font-size: 32px;
+        margin-top: 18px;
+    }
+
+    .metaText {
+        font-size: 20px;
+        margin-top: 14px;
+    }
 }

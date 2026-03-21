@@ -141,6 +141,12 @@
     color: #bcbcbc;
 }
 
+.button:disabled {
+    background-color: #e6e6e6;
+    color: #bcbcbc;
+    cursor: not-allowed;
+}
+
 .secondaryButton {
     margin: 0 16px 16px;
     border-radius: 30px;

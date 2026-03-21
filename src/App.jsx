@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { refresh } from './redux/auth/operations.js';
-import { store } from './redux/store.js';
+// import { store } from './redux/store.js';
 import { useAuth } from './hooks/useAuth.js';
 import { useEffect } from 'react';
 
@@ -23,13 +23,14 @@ const PrivatPage = lazy(() => import('./pages/PrivatPage/PrivatPage.jsx'));
 const LogOutPage = lazy(() => import('./pages/LogOutPage/LogOutPage.jsx'));
 const AddRecipePage = lazy(() => import('./pages/AddRecipePage/AddRecipePage.jsx'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage/ErrorPage.jsx'));
+const RecipePage = lazy(() => import('./components/RecipePage/RecipePage.jsx'));
 
 export default function App() {
     const dispatch = useDispatch();
     const { isRefreshing } = useAuth();
 
     useEffect(() => {
-        store.dispatch(refresh());
+        dispatch(refresh());
     }, [dispatch]);
 
     const loading = useSelector(selectLoading);
@@ -44,22 +45,16 @@ export default function App() {
                     {/* HomePage is public – visible to everyone */}
                     <Route path="/" element={<HomePage />} />
 
-                    <Route
-                        path="/signup"
-                        element={<RestrictedRoute redirectTo="/" component={<SignUpPage />} />}
-                    />
+                    <Route path="/signup" element={<RestrictedRoute redirectTo="/" component={<SignUpPage />} />} />
+
+                    <Route path="/signin" element={<RestrictedRoute redirectTo="/" component={<SignInPage />} />} />
 
                     <Route
-                        path="/signin"
-                        element={<RestrictedRoute redirectTo="/" component={<SignInPage />} />}
-                    />
-
-                    <Route
-                        path="/privatpage"
+                        path="/user/:id"
                         element={<PrivateRoute redirectTo="/signin" component={<PrivatPage />} />}
                     />
 
-                    <Route path="/logout" element={<PrivateRoute redirectTo="/signin" component={<LogOutPage />} />} />
+                    <Route path="/recipe/:id" element={<RecipePage />} />
 
                     <Route
                         path="/recipe/add"
