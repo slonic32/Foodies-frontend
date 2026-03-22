@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -24,13 +23,23 @@ import css from './AddRecipeForm.module.css';
 
 const recipeValidationSchema = Yup.object({
     title: Yup.string().required('Recipe name is required'),
-    description: Yup.string().required('Description is required').max(200, 'Description must be at most 200 characters'),
-    category_id: Yup.string().required('Category is required'),
-    area_id: Yup.string().required('Area is required'),
+    description: Yup.string()
+        .required('Description is required')
+        .max(200, 'Description must be at most 200 characters'),
+    category_id: Yup.mixed().required('Category is required'),
+    area_id: Yup.mixed().required('Area is required'),
     instructions: Yup.string()
         .required('Recipe preparation instructions are required')
         .max(1000, 'Instructions must be at most 1000 characters'),
 });
+
+const initialValues = {
+    title: '',
+    description: '',
+    category_id: '',
+    area_id: '',
+    instructions: '',
+};
 
 export default function AddRecipeForm() {
     const dispatch = useDispatch();
@@ -39,6 +48,8 @@ export default function AddRecipeForm() {
     const categoryRef = useRef(null);
     const areaRef = useRef(null);
     const ingredientRef = useRef(null);
+    const textareaRef = useRef(null);
+    const formikRef = useRef(null);
 
     const categories = useSelector(selectCategories);
     const areas = useSelector(selectAreas);
@@ -60,8 +71,6 @@ export default function AddRecipeForm() {
     const [areaOpen, setAreaOpen] = useState(false);
     const [ingredientOpen, setIngredientOpen] = useState(false);
 
-    const textareaRef = useRef(null);
-
     const autoResizeTextarea = () => {
         const el = textareaRef.current;
         if (el) {
@@ -69,29 +78,6 @@ export default function AddRecipeForm() {
             el.style.height = `${el.scrollHeight}px`;
         }
     };
-
-    const {
-        register,
-        handleSubmit,
-        watch,
-        reset,
-        setValue,
-        formState: { errors },
-    } = useForm({
-        resolver: yupResolver(recipeValidationSchema),
-        defaultValues: {
-            title: '',
-            description: '',
-            category_id: '',
-            area_id: '',
-            instructions: '',
-        },
-    });
-
-    const descriptionValue = watch('description', '');
-    const instructionsValue = watch('instructions', '');
-    const categoryValue = watch('category_id', '');
-    const areaValue = watch('area_id', '');
 
     useEffect(() => {
         dispatch(fetchCategories());
@@ -143,7 +129,7 @@ export default function AddRecipeForm() {
     };
 
     const decrementTime = () => {
-        if (cookingTime > 1) setCookingTime((prev) => prev - 10);
+        setCookingTime((prev) => Math.max(1, prev - 10));
     };
 
     const incrementTime = () => setCookingTime((prev) => prev + 10);
@@ -187,7 +173,9 @@ export default function AddRecipeForm() {
     };
 
     const handleClearForm = () => {
-        reset();
+        if (formikRef.current) {
+            formikRef.current.resetForm();
+        }
         if (imagePreview) URL.revokeObjectURL(imagePreview);
         setImageFile(null);
         setImagePreview(null);
@@ -199,15 +187,15 @@ export default function AddRecipeForm() {
         setIngredientsError('');
     };
 
-    const handleCategorySelect = (e, categoryId) => {
+    const handleCategorySelect = (e, categoryId, setFieldValue) => {
         e.stopPropagation();
-        setValue('category_id', categoryId);
+        setFieldValue('category_id', categoryId);
         setCategoryOpen(false);
     };
 
-    const handleAreaSelect = (e, areaId) => {
+    const handleAreaSelect = (e, areaId, setFieldValue) => {
         e.stopPropagation();
-        setValue('area_id', areaId);
+        setFieldValue('area_id', areaId);
         setAreaOpen(false);
     };
 
@@ -218,13 +206,7 @@ export default function AddRecipeForm() {
         setIngredientOpen(false);
     };
 
-    const { ref: instructionsRhfRef, onChange: instructionsOnChange, ...instructionsRest } = register('instructions');
-
-    const selectedCategoryName = categories.find((c) => c.name === categoryValue)?.name || '';
-    const selectedAreaName = areas.find((a) => a.id === areaValue)?.name || '';
-    const selectedIngredientName = ingredientsOptions.find((i) => String(i.id) === currentIngredientId)?.name || '';
-
-    const onSubmit = (data) => {
+    const onSubmit = (values) => {
         if (!imageFile) {
             setImageError('Recipe image is required');
             return;
@@ -235,13 +217,13 @@ export default function AddRecipeForm() {
         }
 
         const formData = new FormData();
-        formData.append('title', data.title);
-        formData.append('description', data.description);
-        formData.append('instructions', data.instructions);
+        formData.append('title', values.title);
+        formData.append('description', values.description);
+        formData.append('instructions', values.instructions);
         formData.append('thumb', imageFile);
         formData.append('time', cookingTime);
-        formData.append('category_id', data.category_id);
-        formData.append('area_id', data.area_id);
+        formData.append('category_id', values.category_id);
+        formData.append('area_id', values.area_id);
         formData.append(
             'ingredients',
             JSON.stringify(
@@ -260,245 +242,311 @@ export default function AddRecipeForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
-            <div className={css.formLayout}>
-                {/* Image Upload Section */}
-                <div className={css.imageSection}>
-                    <div
-                        className={imagePreview ? css.imageUploadFilled : css.imageUpload}
-                        onClick={handleImageClick}
-                    >
-                        {imagePreview ? (
-                            <img src={imagePreview} alt="Recipe preview" className={css.previewImage} />
-                        ) : (
-                            <div className={css.uploadPlaceholder}>
-                                <HiOutlineCamera size={40} className={css.cameraIcon} />
-                                <span className={css.uploadText}>Upload a photo</span>
-                            </div>
-                        )}
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className={css.fileInput}
-                        />
-                    </div>
-                    {imagePreview && (
-                        <button type="button" className={css.changePhotoBtn} onClick={handleImageClick}>
-                            Upload another photo
-                        </button>
-                    )}
-                    {imageError && <p className={css.error}>{imageError}</p>}
-                </div>
+        <Formik
+            innerRef={formikRef}
+            initialValues={initialValues}
+            validationSchema={recipeValidationSchema}
+            onSubmit={onSubmit}
+        >
+            {({ values, errors, touched, setFieldValue }) => {
+                const selectedCategoryName =
+                    categories.find((c) => String(c.id) === String(values.category_id))?.name || '';
+                const selectedAreaName = areas.find((a) => String(a.id) === String(values.area_id))?.name || '';
+                const selectedIngredientName =
+                    ingredientsOptions.find((i) => String(i.id) === currentIngredientId)?.name || '';
 
-                {/* Form Fields Section */}
-                <div className={css.fieldsSection}>
-                    {/* Recipe Title — heading-style input */}
-                    <div className={css.field}>
-                        <input
-                            className={errors.title ? css.titleInputError : css.titleInput}
-                            type="text"
-                            placeholder="THE NAME OF THE RECIPE"
-                            {...register('title')}
-                        />
-                        {errors.title && <p className={css.error}>{errors.title.message}</p>}
-                    </div>
-
-                    {/* Description */}
-                    <div className={css.field}>
-                        <div className={css.fieldWithCounter}>
-                            <input
-                                className={errors.description ? css.inputError : css.inputUnderline}
-                                type="text"
-                                placeholder="Enter a description of the dish"
-                                {...register('description')}
-                            />
-                            <span className={css.counter}>
-                                {descriptionValue.length}/<span className={css.counterMax}>200</span>
-                            </span>
-                        </div>
-                        {errors.description && <p className={css.error}>{errors.description.message}</p>}
-                    </div>
-
-                    {/* Category and Cooking Time Row */}
-                    <div className={css.row}>
-                        {/* Category */}
-                        <div className={css.fieldHalf}>
-                            <label className={css.label}>CATEGORY</label>
-                            <div className={css.selectWrapper} ref={categoryRef}>
+                return (
+                    <Form className={css.form}>
+                        <div className={css.formLayout}>
+                            {/* Image Upload Section */}
+                            <div className={css.imageSection}>
                                 <div
-                                    className={errors.category_id ? css.selectError : css.select}
-                                    onClick={() => setCategoryOpen(!categoryOpen)}
+                                    className={imagePreview ? css.imageUploadFilled : css.imageUpload}
+                                    onClick={handleImageClick}
                                 >
-                                    <span className={selectedCategoryName ? css.selectValue : css.selectPlaceholder}>
-                                        {selectedCategoryName || 'Select a category'}
-                                    </span>
-                                    <FiChevronDown
-                                        size={20}
-                                        className={`${css.chevron} ${categoryOpen ? css.chevronOpen : ''}`}
+                                    {imagePreview ? (
+                                        <img src={imagePreview} alt="Recipe preview" className={css.previewImage} />
+                                    ) : (
+                                        <div className={css.uploadPlaceholder}>
+                                            <HiOutlineCamera size={40} className={css.cameraIcon} />
+                                            <span className={css.uploadText}>Upload a photo</span>
+                                        </div>
+                                    )}
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        className={css.fileInput}
                                     />
                                 </div>
-                                {categoryOpen && (
-                                    <ul className={css.dropdown}>
-                                        {categories.map((category) => (
-                                            <li
-                                                key={category.name}
-                                                className={css.dropdownItem}
-                                                onClick={(e) => handleCategorySelect(e, category.name)}
-                                            >
-                                                {category.name}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                {imagePreview && (
+                                    <button type="button" className={css.changePhotoBtn} onClick={handleImageClick}>
+                                        Upload another photo
+                                    </button>
                                 )}
+                                {imageError && <p className={css.error}>{imageError}</p>}
                             </div>
-                            <input type="hidden" {...register('category_id')} />
-                            {errors.category_id && <p className={css.error}>{errors.category_id.message}</p>}
-                        </div>
 
-                        {/* Cooking Time */}
-                        <div className={css.fieldHalf}>
-                            <label className={css.label}>COOKING TIME</label>
-                            <div className={css.timeCounter}>
-                                <button type="button" className={css.timeBtn} onClick={decrementTime}>
-                                    <FiMinus size={16} />
-                                </button>
-                                <span className={css.timeValue}>{cookingTime} min</span>
-                                <button type="button" className={css.timeBtn} onClick={incrementTime}>
-                                    <FiPlus size={16} />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                            {/* Form Fields Section */}
+                            <div className={css.fieldsSection}>
+                                {/* Recipe Title */}
+                                <div className={css.field}>
+                                    <Field
+                                        name="title"
+                                        type="text"
+                                        placeholder="THE NAME OF THE RECIPE"
+                                        className={
+                                            errors.title && touched.title ? css.titleInputError : css.titleInput
+                                        }
+                                    />
+                                    <ErrorMessage name="title" component="p" className={css.error} />
+                                </div>
 
-                    {/* Area */}
-                    <div className={css.field}>
-                        <label className={css.label}>AREA</label>
-                        <div className={css.selectWrapper} ref={areaRef}>
-                            <div
-                                className={errors.area_id ? css.selectError : css.select}
-                                onClick={() => setAreaOpen(!areaOpen)}
-                            >
-                                <span className={selectedAreaName ? css.selectValue : css.selectPlaceholder}>
-                                    {selectedAreaName || 'Area'}
-                                </span>
-                                <FiChevronDown
-                                    size={20}
-                                    className={`${css.chevron} ${areaOpen ? css.chevronOpen : ''}`}
-                                />
-                            </div>
-                            {areaOpen && (
-                                <ul className={css.dropdown}>
-                                    {areas.map((area) => (
-                                        <li
-                                            key={area.id}
-                                            className={css.dropdownItem}
-                                            onClick={(e) => handleAreaSelect(e, area.id)}
+                                {/* Description */}
+                                <div className={css.field}>
+                                    <div className={css.fieldWithCounter}>
+                                        <Field
+                                            name="description"
+                                            type="text"
+                                            placeholder="Enter a description of the dish"
+                                            className={
+                                                errors.description && touched.description
+                                                    ? css.inputError
+                                                    : css.inputUnderline
+                                            }
+                                        />
+                                        <span className={css.counter}>
+                                            {values.description.length}/
+                                            <span className={css.counterMax}>200</span>
+                                        </span>
+                                    </div>
+                                    <ErrorMessage name="description" component="p" className={css.error} />
+                                </div>
+
+                                {/* Category and Cooking Time Row */}
+                                <div className={css.row}>
+                                    {/* Category */}
+                                    <div className={css.fieldHalf}>
+                                        <label className={css.label}>CATEGORY</label>
+                                        <div className={css.selectWrapper} ref={categoryRef}>
+                                            <div
+                                                className={
+                                                    errors.category_id && touched.category_id
+                                                        ? css.selectError
+                                                        : css.select
+                                                }
+                                                onClick={() => setCategoryOpen(!categoryOpen)}
+                                            >
+                                                <span
+                                                    className={
+                                                        selectedCategoryName
+                                                            ? css.selectValue
+                                                            : css.selectPlaceholder
+                                                    }
+                                                >
+                                                    {selectedCategoryName || 'Select a category'}
+                                                </span>
+                                                <FiChevronDown
+                                                    size={20}
+                                                    className={`${css.chevron} ${categoryOpen ? css.chevronOpen : ''}`}
+                                                />
+                                            </div>
+                                            {categoryOpen && (
+                                                <ul className={css.dropdown}>
+                                                    {categories.map((category) => (
+                                                        <li
+                                                            key={category.id}
+                                                            className={css.dropdownItem}
+                                                            onClick={(e) =>
+                                                                handleCategorySelect(e, category.id, setFieldValue)
+                                                            }
+                                                        >
+                                                            {category.name}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </div>
+                                        <ErrorMessage name="category_id" component="p" className={css.error} />
+                                    </div>
+
+                                    {/* Cooking Time */}
+                                    <div className={css.fieldHalf}>
+                                        <label className={css.label}>COOKING TIME</label>
+                                        <div className={css.timeCounter}>
+                                            <button type="button" className={css.timeBtn} onClick={decrementTime}>
+                                                <FiMinus size={16} />
+                                            </button>
+                                            <span className={css.timeValue}>{cookingTime} min</span>
+                                            <button type="button" className={css.timeBtn} onClick={incrementTime}>
+                                                <FiPlus size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Area */}
+                                <div className={css.field}>
+                                    <label className={css.label}>AREA</label>
+                                    <div className={css.selectWrapper} ref={areaRef}>
+                                        <div
+                                            className={
+                                                errors.area_id && touched.area_id ? css.selectError : css.select
+                                            }
+                                            onClick={() => setAreaOpen(!areaOpen)}
                                         >
-                                            {area.name}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                        <input type="hidden" {...register('area_id')} />
-                        {errors.area_id && <p className={css.error}>{errors.area_id.message}</p>}
-                    </div>
-
-                    {/* Ingredients */}
-                    <div className={css.field}>
-                        <label className={css.label}>INGREDIENTS</label>
-                        <div className={css.ingredientRow}>
-                            <div className={css.selectWrapper} ref={ingredientRef}>
-                                <div className={css.select} onClick={() => setIngredientOpen(!ingredientOpen)}>
-                                    <span
-                                        className={selectedIngredientName ? css.selectValue : css.selectPlaceholder}
-                                    >
-                                        {selectedIngredientName || 'Add the ingredient'}
-                                    </span>
-                                    <FiChevronDown
-                                        size={20}
-                                        className={`${css.chevron} ${ingredientOpen ? css.chevronOpen : ''}`}
-                                    />
-                                </div>
-                                {ingredientOpen && (
-                                    <ul className={css.dropdown}>
-                                        {ingredientsOptions.map((ingredient) => (
-                                            <li
-                                                key={ingredient.id}
-                                                className={css.dropdownItem}
-                                                onClick={(e) => handleIngredientSelect(e, ingredient.id)}
+                                            <span
+                                                className={
+                                                    selectedAreaName ? css.selectValue : css.selectPlaceholder
+                                                }
                                             >
-                                                {ingredient.name}
-                                            </li>
+                                                {selectedAreaName || 'Area'}
+                                            </span>
+                                            <FiChevronDown
+                                                size={20}
+                                                className={`${css.chevron} ${areaOpen ? css.chevronOpen : ''}`}
+                                            />
+                                        </div>
+                                        {areaOpen && (
+                                            <ul className={css.dropdown}>
+                                                {areas.map((area) => (
+                                                    <li
+                                                        key={area.id}
+                                                        className={css.dropdownItem}
+                                                        onClick={(e) =>
+                                                            handleAreaSelect(e, area.id, setFieldValue)
+                                                        }
+                                                    >
+                                                        {area.name}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                    <ErrorMessage name="area_id" component="p" className={css.error} />
+                                </div>
+
+                                {/* Ingredients */}
+                                <div className={css.field}>
+                                    <label className={css.label}>INGREDIENTS</label>
+                                    <div className={css.ingredientRow}>
+                                        <div className={css.selectWrapper} ref={ingredientRef}>
+                                            <div
+                                                className={css.select}
+                                                onClick={() => setIngredientOpen(!ingredientOpen)}
+                                            >
+                                                <span
+                                                    className={
+                                                        selectedIngredientName
+                                                            ? css.selectValue
+                                                            : css.selectPlaceholder
+                                                    }
+                                                >
+                                                    {selectedIngredientName || 'Add the ingredient'}
+                                                </span>
+                                                <FiChevronDown
+                                                    size={20}
+                                                    className={`${css.chevron} ${ingredientOpen ? css.chevronOpen : ''}`}
+                                                />
+                                            </div>
+                                            {ingredientOpen && (
+                                                <ul className={css.dropdown}>
+                                                    {ingredientsOptions.map((ingredient) => (
+                                                        <li
+                                                            key={ingredient.id}
+                                                            className={css.dropdownItem}
+                                                            onClick={(e) =>
+                                                                handleIngredientSelect(e, ingredient.id)
+                                                            }
+                                                        >
+                                                            {ingredient.name}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </div>
+                                        <input
+                                            className={css.measureInput}
+                                            type="text"
+                                            placeholder="Enter quantity"
+                                            value={currentMeasure}
+                                            onChange={(e) => setCurrentMeasure(e.target.value)}
+                                        />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className={css.addIngredientBtn}
+                                        onClick={handleAddIngredient}
+                                    >
+                                        ADD INGREDIENT <FiPlus size={16} />
+                                    </button>
+                                    {ingredientsError && <p className={css.error}>{ingredientsError}</p>}
+                                </div>
+
+                                {/* Selected Ingredients List */}
+                                {selectedIngredients.length > 0 && (
+                                    <div className={css.ingredientsList}>
+                                        {selectedIngredients.map((ingredient) => (
+                                            <IngredientCard
+                                                key={ingredient.id}
+                                                ingredient={ingredient}
+                                                onRemove={handleRemoveIngredient}
+                                            />
                                         ))}
-                                    </ul>
+                                    </div>
                                 )}
+
+                                {/* Recipe Preparation */}
+                                <div className={css.field}>
+                                    <label className={css.label}>RECIPE PREPARATION</label>
+                                    <div className={css.fieldWithCounter}>
+                                        <Field name="instructions">
+                                            {({ field }) => (
+                                                <textarea
+                                                    {...field}
+                                                    ref={textareaRef}
+                                                    className={
+                                                        errors.instructions && touched.instructions
+                                                            ? css.textareaError
+                                                            : css.textarea
+                                                    }
+                                                    placeholder="Enter recipe"
+                                                    rows={1}
+                                                    onChange={(e) => {
+                                                        field.onChange(e);
+                                                        autoResizeTextarea();
+                                                    }}
+                                                />
+                                            )}
+                                        </Field>
+                                        <span className={css.counterTextarea}>
+                                            {values.instructions.length}/
+                                            <span className={css.counterMax}>1000</span>
+                                        </span>
+                                    </div>
+                                    <ErrorMessage name="instructions" component="p" className={css.error} />
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className={css.actions}>
+                                    <button
+                                        type="button"
+                                        className={css.clearBtn}
+                                        onClick={handleClearForm}
+                                        aria-label="Clear form"
+                                    >
+                                        <FiTrash2 size={20} />
+                                    </button>
+                                    <button type="submit" className={css.publishBtn} disabled={loading}>
+                                        {loading ? 'Publishing...' : 'PUBLISH'}
+                                    </button>
+                                </div>
                             </div>
-                            <input
-                                className={css.measureInput}
-                                type="text"
-                                placeholder="Enter quantity"
-                                value={currentMeasure}
-                                onChange={(e) => setCurrentMeasure(e.target.value)}
-                            />
                         </div>
-                        <button type="button" className={css.addIngredientBtn} onClick={handleAddIngredient}>
-                            ADD INGREDIENT <FiPlus size={16} />
-                        </button>
-                        {ingredientsError && <p className={css.error}>{ingredientsError}</p>}
-                    </div>
-
-                    {/* Selected Ingredients List */}
-                    {selectedIngredients.length > 0 && (
-                        <div className={css.ingredientsList}>
-                            {selectedIngredients.map((ingredient) => (
-                                <IngredientCard
-                                    key={ingredient.id}
-                                    ingredient={ingredient}
-                                    onRemove={handleRemoveIngredient}
-                                />
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Recipe Preparation */}
-                    <div className={css.field}>
-                        <label className={css.label}>RECIPE PREPARATION</label>
-                        <div className={css.fieldWithCounter}>
-                            <textarea
-                                className={errors.instructions ? css.textareaError : css.textarea}
-                                placeholder="Enter recipe"
-                                rows={1}
-                                {...instructionsRest}
-                                ref={(el) => {
-                                    instructionsRhfRef(el);
-                                    textareaRef.current = el;
-                                }}
-                                onChange={(e) => {
-                                    instructionsOnChange(e);
-                                    autoResizeTextarea();
-                                }}
-                            />
-                            <span className={css.counterTextarea}>
-                                {instructionsValue.length}/<span className={css.counterMax}>1000</span>
-                            </span>
-                        </div>
-                        {errors.instructions && <p className={css.error}>{errors.instructions.message}</p>}
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className={css.actions}>
-                        <button type="button" className={css.clearBtn} onClick={handleClearForm} aria-label="Clear form">
-                            <FiTrash2 size={20} />
-                        </button>
-                        <button type="submit" className={css.publishBtn} disabled={loading}>
-                            {loading ? 'Publishing...' : 'PUBLISH'}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
+                    </Form>
+                );
+            }}
+        </Formik>
     );
 }

@@ -20,7 +20,6 @@ const HomePage = lazy(() => import('./pages/HomePage/HomePage.jsx'));
 const SignInPage = lazy(() => import('./pages/SignInPage/SignInPage.jsx'));
 const SignUpPage = lazy(() => import('./pages/SignUpPage/SignUpPage.jsx'));
 const PrivatPage = lazy(() => import('./pages/PrivatPage/PrivatPage.jsx'));
-const LogOutPage = lazy(() => import('./pages/LogOutPage/LogOutPage.jsx'));
 const AddRecipePage = lazy(() => import('./pages/AddRecipePage/AddRecipePage.jsx'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage/ErrorPage.jsx'));
 const RecipePage = lazy(() => import('./components/RecipePage/RecipePage.jsx'));
@@ -53,13 +52,14 @@ export default function App() {
                         path="/user/:id"
                         element={<PrivateRoute redirectTo="/signin" component={<PrivatPage />} />}
                     />
+                    
+                    <Route
+                        path="/recipe/add"
+                        element={<PrivateRoute redirectTo="/signin" component={<AddRecipePage />} />}
+                    />
 
                     <Route path="/recipe/:id" element={<RecipePage />} />
 
-                    <Route
-                        path="/recipe/add"
-                        element={<RestrictedRoute redirectTo="/signin" component={<AddRecipePage />} />}
-                    />
 
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>

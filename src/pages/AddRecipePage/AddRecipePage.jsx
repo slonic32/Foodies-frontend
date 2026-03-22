@@ -13,7 +13,7 @@ function AddRecipePage() {
 
             <main className={css.main}>
                 <div className={css.container}>
-                    <PathInfo current="ADD RECIPE" />
+                    <PathInfo pageTitle="ADD RECIPE" />
 
                     <div className={css.titleSection}>
                         <MainTitle>ADD RECIPE</MainTitle>
