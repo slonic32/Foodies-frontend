@@ -1,6 +1,5 @@
 .section {
     margin-top: 64px;
-    margin-bottom: 80px;
     padding: 0 16px;
 }
 
@@ -137,7 +136,6 @@
 @media screen and (min-width: 768px) {
     .section {
         margin-top: 100px;
-        margin-bottom: 100px;
         padding: 0 32px;
     }
 
@@ -197,7 +195,6 @@
 
     .section {
         margin-top: 120px;
-        margin-bottom: 120px;
     }
 
     .sliderWrapper {

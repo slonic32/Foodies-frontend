@@ -157,18 +157,20 @@ function HomePage() {
 
             {/* ── Categories or Recipes section ──────────────────────── */}
             <section className={css.categoriesSection}>
-                {!selectedCategory ? (
-                    <>
-                        <MainTitle>Categories</MainTitle>
-                        <Subtitle className={css.categoriesSubtitle}>
-                            Discover a limitless world of culinary possibilities and enjoy exquisite recipes that
-                            combine taste, style and the warm atmosphere of the kitchen.
-                        </Subtitle>
-                        <CategoryList onSelectCategory={setSelectedCategory} />
-                    </>
-                ) : (
-                    <Recipes category={selectedCategory} onBack={() => setSelectedCategory(null)} />
-                )}
+                <div className={css.container}>
+                    {!selectedCategory ? (
+                        <>
+                            <MainTitle>Categories</MainTitle>
+                            <Subtitle className={css.categoriesSubtitle}>
+                                Discover a limitless world of culinary possibilities and enjoy exquisite recipes that
+                                combine taste, style and the warm atmosphere of the kitchen.
+                            </Subtitle>
+                            <CategoryList onSelectCategory={setSelectedCategory} />
+                        </>
+                    ) : (
+                        <Recipes category={selectedCategory} onBack={() => setSelectedCategory(null)} />
+                    )}
+                </div>
             </section>
 
             {/* ── Testimonials section ────────────────────── */}

@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../../redux/categories/operations';
-import { selectCategories } from '../../redux/categories/selectors';
+import { selectCategories, selectIsLoading, selectError } from '../../redux/categories/selectors';
 import css from './CategoryList.module.css';
+import Loader from '../Loader/Loader';
 
 // Import assets
 import beefImg from '../../assets/Beef.jpg';
@@ -32,9 +33,26 @@ const imageMap = {
     Starter: starterImg,
 };
 
+const categoryOrder = [
+    'Beef',
+    'Breakfast',
+    'Dessert',
+    'Desserts',
+    'Lamb',
+    'Goat',
+    'Miscellaneous',
+    'Pasta',
+    'Pork',
+    'Seafood',
+    'Side',
+    'Starter',
+];
+
 function CategoryList({ onSelectCategory }) {
     const dispatch = useDispatch();
     const categoriesFromRedux = useSelector(selectCategories);
+    const isLoading = useSelector(selectIsLoading);
+    const error = useSelector(selectError);
 
     useEffect(() => {
         dispatch(fetchCategories());
@@ -44,47 +62,64 @@ function CategoryList({ onSelectCategory }) {
         if (onSelectCategory) onSelectCategory({ id: categoryId, name: categoryName });
     };
 
-    // Map images and filter out categories without an image
+    if (isLoading && categoriesFromRedux.length === 0) {
+        return <Loader />;
+    }
+
+    if (error) {
+        return <p>Something went wrong...</p>;
+    }
+
     const categories = categoriesFromRedux
         .map((cat) => ({
             ...cat,
             image: imageMap[cat.name],
         }))
-        .filter((cat) => cat.image);
+        .filter((cat) => cat.image)
+        .sort((a, b) => categoryOrder.indexOf(a.name) - categoryOrder.indexOf(b.name));
 
     return (
-        <ul className={css.list}>
-            {categories.map(({ id, name, image }) => (
-                <li key={id} className={css.item}>
-                    <div className={css.card}>
-                        <img src={image} alt={name} className={css.image} />
-                        <div className={css.footer}>
-                            <span className={css.name}>{name}</span>
-                            <button
-                                className={css.arrowBtn}
-                                onClick={() => handleSelectCategory(id, name)}
-                                type="button"
-                                aria-label={`View recipes for ${name}`}
-                            >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                    <path d="M7 17L17 7M17 7H7M17 7V17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                            </button>
+        <div className={css.wrapper}>
+            <ul className={css.list}>
+                {categories.map(({ id, name, image }) => (
+                    <li key={id} className={css.item}>
+                        <div className={css.card}>
+                            <img src={image} alt={name} className={css.image} />
+                            <div className={css.footer}>
+                                <span className={css.name}>{name}</span>
+                                <button
+                                    className={css.arrowBtn}
+                                    onClick={() => handleSelectCategory(id, name)}
+                                    type="button"
+                                    aria-label={`View recipes for ${name}`}
+                                >
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                        <path
+                                            d="M7 17L17 7M17 7H7M17 7V17"
+                                            stroke="white"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </li>
+                ))}
+
+                <li className={css.item}>
+                    <button
+                        className={`${css.card} ${css.allCard}`}
+                        onClick={() => handleSelectCategory('all', 'All categories')}
+                        type="button"
+                        aria-label="View all recipes"
+                    >
+                        <span className={css.allLabel}>ALL CATEGORIES</span>
+                    </button>
                 </li>
-            ))}
-            <li className={css.item}>
-                <button
-                    className={`${css.card} ${css.allCard}`}
-                    onClick={() => handleSelectCategory('all', 'all')}
-                    type="button"
-                    aria-label="View all recipes"
-                >
-                    <span className={css.allLabel}>ALL CATEGORIES</span>
-                </button>
-            </li>
-        </ul>
+            </ul>
+        </div>
     );
 }
 
