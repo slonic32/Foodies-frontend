@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import css from './PrivatPage.module.css';
 import UserInfo from '../../components/UserInfo/UserInfo.jsx';
+// import UserCard from '../../components/UserCard/UserCard.jsx';
 import { selectUser, selectToken } from '../../redux/auth/selectors.js';
 import {
     selectProfile,
