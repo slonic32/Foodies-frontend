@@ -44,19 +44,14 @@ export default function App() {
                     {/* HomePage is public – visible to everyone */}
                     <Route path="/" element={<HomePage />} />
 
-                    <Route path="/signup" element={<RestrictedRoute redirectTo="/" component={<SignUpPage />} />} />
-
-                    <Route path="/signin" element={<RestrictedRoute redirectTo="/" component={<SignInPage />} />} />
-
-                    <Route
-                        path="/user/:id"
-                        element={<PrivateRoute redirectTo="/signin" component={<PrivatPage />} />}
-                    />
+                
+                   
                     
                     <Route
                         path="/recipe/add"
-                        element={<PrivateRoute redirectTo="/signin" component={<AddRecipePage />} />}
+                        element={<PrivateRoute redirectTo="/" component={<AddRecipePage />} />}
                     />
+                    <Route path="/user/:id" element={<PrivateRoute redirectTo="/" component={<PrivatPage />} />} />
 
                     <Route path="/recipe/:id" element={<RecipePage />} />
 

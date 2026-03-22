@@ -4,16 +4,16 @@ export default function ArrowUpIcon(props) {
             <path
                 d="M5.25 12.75L12.75 5.25"
                 stroke="currentColor"
-                stroke-width="1.3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
             <path
                 d="M5.25 5.25H12.75V12.75"
                 stroke="currentColor"
-                stroke-width="1.3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
         </svg>
     );
