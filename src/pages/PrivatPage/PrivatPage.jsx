@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,9 +14,135 @@ import {
 } from '../../redux/users/selectors.js';
 import { fetchOwnProfile, fetchOtherProfile, followUser, unfollowUser } from '../../redux/users/operations.js';
 
+import { showNotification } from '../../utils/notification.jsx';
+
+import { logout } from '../../redux/auth/operations.js';
+
 export default function PrivatPage() {
-    const { id } = useParams();
+    const [isSignInOpen, setIsSignInOpen] = useState(false);
+    const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+
+    const [isLogOutOpen, setIsLogOutOpen] = useState(false);
+
+    const openSignInModal = () => {
+        setIsLogOutOpen(false);
+        setIsSignUpOpen(false);
+        setIsSignInOpen(true);
+    };
+
+    const openSignUpModal = () => {
+        setIsLogOutOpen(false);
+        setIsSignInOpen(false);
+        setIsSignUpOpen(true);
+    };
+
+    const openLogOutModal = () => {
+        setIsSignInOpen(false);
+        setIsSignUpOpen(false);
+        setIsLogOutOpen(true);
+    };
+
+    const closeSignInModal = () => setIsSignInOpen(false);
+    const closeSignUpModal = () => setIsSignUpOpen(false);
+    const closeLogOutModal = () => setIsLogOutOpen(false);
+
     const dispatch = useDispatch();
+
+    const handleConfirmLogout = async () => {
+        try {
+            await dispatch(logout()).unwrap();
+
+            showNotification('You have been logged out successfully!', 'success');
+        } catch (error) {
+            showNotification('Failed to log out. Please try again.', 'error');
+            console.error('Logout operation failed:', error);
+        }
+
+        closeLogOutModal();
+
+        if (typeof window !== 'undefined') {
+            // Reload the page to ensure UI reflects logged-out state.
+            window.location.reload();
+        }
+    };
+
+    function LogOutModal({ onClose }) {
+        const handleCancel = () => {
+            if (onClose) {
+                onClose();
+            }
+        };
+
+        return (
+            <div
+                style={{
+                    position: 'fixed',
+                    inset: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1000,
+                }}
+            >
+                <div
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        padding: '24px',
+                        maxWidth: '320px',
+                        width: '100%',
+                        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
+                        textAlign: 'center',
+                    }}
+                >
+                    <h2 style={{ margin: '0 0 8px', fontSize: '20px' }}>Log out</h2>
+                    <p style={{ margin: '0 0 24px', fontSize: '14px', color: '#555' }}>
+                        Are you sure you want to log out?
+                    </p>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            gap: '8px',
+                        }}
+                    >
+                        <button
+                            type="button"
+                            onClick={handleCancel}
+                            style={{
+                                flex: 1,
+                                padding: '8px 12px',
+                                borderRadius: '4px',
+                                border: '1px solid #ccc',
+                                backgroundColor: '#fff',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleConfirmLogout}
+                            style={{
+                                flex: 1,
+                                padding: '8px 12px',
+                                borderRadius: '4px',
+                                border: 'none',
+                                backgroundColor: '#e74c3c',
+                                color: '#fff',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            Log out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const { id } = useParams();
 
     const currentUser = useSelector(selectUser);
     const token = useSelector(selectToken);
@@ -71,7 +197,7 @@ export default function PrivatPage() {
             </div>
 
             {isOwnProfile ? (
-                <button type="button" className={css.actionBtn}>
+                <button type="button" className={css.actionBtn} onClick={openLogOutModal}>
                     LOG OUT
                 </button>
             ) : (
@@ -83,6 +209,8 @@ export default function PrivatPage() {
             <NavLink to="/" className={css.linkSignIn}>
                 Back Home
             </NavLink>
+
+            {isLogOutOpen && <LogOutModal onClose={closeLogOutModal} />}
         </div>
     );
 }
