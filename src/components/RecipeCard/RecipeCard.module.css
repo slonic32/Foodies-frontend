@@ -136,6 +136,10 @@
     color: #050505;
 }
 
+.iconButtonFavorite {
+    background-color: #050505;
+}
+
 .iconButton:hover {
     background-color: rgba(5, 5, 5, 0.05);
 }

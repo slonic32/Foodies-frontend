@@ -6,6 +6,7 @@ import recipe_2 from '../../assets/recipe_2.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavorite, deleteFavorite } from '../../redux/favorites/favoritesOperations';
 import { selectFavoriteItems } from '../../redux/favorites/favoritesSelectors';
+import { selectIsLoggedIn } from '../../redux/auth/selectors';
 
 // Fallback images for recipe cards
 const FALLBACK_IMAGES = {
@@ -28,6 +29,8 @@ function RecipeCard({ recipe }) {
 
     const dispatch = useDispatch();
     const favoriteItems = useSelector(selectFavoriteItems);
+
+    const isLoggedIn = useSelector(selectIsLoggedIn);
 
     const isFavorite = favoriteItems.includes(recipe.id);
 
@@ -60,7 +63,8 @@ function RecipeCard({ recipe }) {
                     </div>
                     <div className={css.actions}>
                         <button
-                            className={css.iconButton}
+                            className={`${css.iconButton} ${isFavorite ? css.iconButtonFavorite : ''}`}
+                            disabled={!isLoggedIn}
                             aria-label={`Add ${title} to favorites`}
                             onClick={handleFavoriteToggle}
                         >
