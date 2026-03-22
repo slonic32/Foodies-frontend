@@ -1,4 +1,4 @@
 export const navItems = [
     { to: '/', label: 'HOME' },
-    { to: '/add', label: 'ADD RECIPE' },
+    { to: '/recipe/add', label: 'ADD RECIPE' },
 ];
