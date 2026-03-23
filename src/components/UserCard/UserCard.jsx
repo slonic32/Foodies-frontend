@@ -14,11 +14,23 @@ function getAvatarSrc(avatar) {
         : `${BACKEND_HOST}/${normalizedAvatar}`;
 }
 
-export default function UserCard({ user, isFollowing = false, isLoading = false, onToggleFollow }) {
-    const userId = user?.id || user?._id;
+function getRecipeImage(recipe) {
+    const image = recipe?.thumb || recipe?.preview || recipe?.image || recipe?.photo || '';
+    if (!image) return '';
+
+    if (image.startsWith('http')) return image;
+
+    const normalizedImage = image.replace(/\\/g, '/');
+
+    return normalizedImage.startsWith('/') ? `${BACKEND_HOST}${normalizedImage}` : `${BACKEND_HOST}/${normalizedImage}`;
+}
+
+export default function UserCard({ user, activeTab = 'followers', isLoading = false, onFollowToggle, currentUserId }) {
+    const userId = user?.id || user?._id || user?.userId || '';
+    const isOwnCard = String(currentUserId) === String(userId);
     const userName = user?.name || 'User';
     const avatarSrc = getAvatarSrc(user?.avatar || '');
-    const recipesCount = user?.recipesCount ?? 0;
+    const recipesCount = user?.recipesCount ?? user?.ownRecipesCount ?? 0;
 
     const recipesPreview = Array.isArray(user?.recipesPreview)
         ? user.recipesPreview
@@ -26,13 +38,19 @@ export default function UserCard({ user, isFollowing = false, isLoading = false,
           ? user.recipes
           : [];
 
+    const isFollowing = user?.isFollowing ?? user?.following ?? activeTab === 'following';
+
+    const shouldShowFollowButton = !isOwnCard && (activeTab === 'followers' || activeTab === 'following');
+
+    const buttonLabel = isFollowing ? 'UNFOLLOW' : 'FOLLOW';
+
     const handleToggleFollow = () => {
         if (isLoading || !userId) return;
-        onToggleFollow?.(user);
+        onFollowToggle?.(user);
     };
 
     return (
-        <li className={css.item}>
+        <div className={css.item}>
             <div className={css.main}>
                 <div className={css.left}>
                     <img className={css.avatar} src={avatarSrc} alt={`${userName} avatar`} />
@@ -41,37 +59,39 @@ export default function UserCard({ user, isFollowing = false, isLoading = false,
                         <h3 className={css.name}>{userName}</h3>
                         <p className={css.count}>Own recipes: {recipesCount}</p>
 
-                        <button
-                            type="button"
-                            className={css.followBtn}
-                            onClick={handleToggleFollow}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? 'LOADING...' : isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
-                        </button>
+                        {shouldShowFollowButton && (
+                            <button
+                                type="button"
+                                className={css.followBtn}
+                                onClick={handleToggleFollow}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? '...' : buttonLabel}
+                            </button>
+                        )}
                     </div>
                 </div>
 
                 <div className={css.right}>
                     <div className={css.previewList}>
-                        {recipesPreview.map((recipe) => {
-                            const recipeId = recipe?.id || recipe?._id;
-                            const recipeThumb = recipe?.thumb || recipe?.preview || recipe?.image || '';
+                        {recipesPreview.slice(0, 4).map((recipe) => {
+                            const recipeId = recipe?.id || recipe?._id || recipe?.recipeId;
+                            const recipeImage = getRecipeImage(recipe);
                             const recipeTitle = recipe?.title || 'Recipe';
 
-                            if (!recipeThumb) return null;
+                            if (!recipeImage) return null;
 
                             return (
-                                <img key={recipeId} className={css.previewImg} src={recipeThumb} alt={recipeTitle} />
+                                <img key={recipeId} className={css.previewImg} src={recipeImage} alt={recipeTitle} />
                             );
                         })}
                     </div>
 
-                    <Link to={`/user/${userId}`} className={css.arrowLink} aria-label="Open user profile">
+                    <Link to={`/user/${userId}`} className={css.arrowLink} aria-label={`Open ${userName} profile`}>
                         ↗
                     </Link>
                 </div>
             </div>
-        </li>
+        </div>
     );
 }
