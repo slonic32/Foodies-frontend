@@ -23,6 +23,7 @@ export default function PrivatPage() {
     const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
     const [isLogOutOpen, setIsLogOutOpen] = useState(false);
+    const [isFollowLoading, setIsFollowLoading] = useState(false);
 
     const openSignInModal = () => {
         setIsLogOutOpen(false);
@@ -155,6 +156,7 @@ export default function PrivatPage() {
     const currentUserId = String(currentUser?.id || currentUser?._id || '');
     const profileId = String(id || '');
     const isOwnProfile = currentUserId === profileId;
+    const displayedUser = isOwnProfile ? currentUser : profileUser;
 
     useEffect(() => {
         if (!id || !token || !currentUserId) return;
@@ -166,13 +168,22 @@ export default function PrivatPage() {
         }
     }, [dispatch, id, token, currentUserId, isOwnProfile]);
 
-    const handleFollowToggle = () => {
-        if (!token || !id) return;
+    const handleFollowToggle = async () => {
+        if (!token || !id || isFollowLoading) return;
 
-        if (isFollowing) {
-            dispatch(unfollowUser({ id, token }));
-        } else {
-            dispatch(followUser({ id, token }));
+        setIsFollowLoading(true);
+
+        try {
+            if (isFollowing) {
+                await dispatch(unfollowUser({ id, token })).unwrap();
+            } else {
+                await dispatch(followUser({ id, token })).unwrap();
+            }
+        } catch (error) {
+            showNotification('Failed to update follow status.', 'error');
+            console.error(error);
+        } finally {
+            setIsFollowLoading(false);
         }
     };
 
@@ -193,7 +204,7 @@ export default function PrivatPage() {
             </p>
 
             <div className={css.userInfoWrap}>
-                <UserInfo user={profileUser} isOwnProfile={isOwnProfile} />
+                <UserInfo user={displayedUser} isOwnProfile={isOwnProfile} />
             </div>
 
             {isOwnProfile ? (
@@ -201,8 +212,8 @@ export default function PrivatPage() {
                     LOG OUT
                 </button>
             ) : (
-                <button type="button" className={css.actionBtn} onClick={handleFollowToggle}>
-                    {isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
+                <button type="button" className={css.actionBtn} onClick={handleFollowToggle} disabled={isFollowLoading}>
+                    {isFollowLoading ? '...' : isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
                 </button>
             )}
 
