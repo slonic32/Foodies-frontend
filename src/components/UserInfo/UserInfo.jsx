@@ -6,6 +6,7 @@ import { selectAuthLoading } from '../../redux/auth/selectors';
 import { BACKEND_HOST } from '../../config/backend';
 import defaultAvatar from '../../assets/avatar_default.svg';
 import toast from 'react-hot-toast';
+import Loader from '../Loader/Loader';
 
 const DEFAULT_AVATAR = defaultAvatar;
 
@@ -61,7 +62,17 @@ export default function UserInfo({ user, isOwnProfile = false }) {
         <section className={css.card}>
             <div className={css.head}>
                 <div className={css.avatarWrap}>
-                    <img className={css.avatar} src={preparedUser.avatar} alt={preparedUser.name} />
+                    <img
+                        className={`${css.avatar} ${isLoading ? css.avatarLoading : ''}`}
+                        src={preparedUser.avatar}
+                        alt={preparedUser.name}
+                    />
+
+                    {isLoading && (
+                        <div className={css.loaderOverlay}>
+                            <Loader />
+                        </div>
+                    )}
 
                     {isOwnProfile && (
                         <>
@@ -71,14 +82,16 @@ export default function UserInfo({ user, isOwnProfile = false }) {
                                 type="file"
                                 accept="image/*"
                                 onChange={handleFileChange}
+                                disabled={isLoading}
                             />
                             <button
                                 type="button"
                                 className={css.addBtn}
                                 onClick={handleAvatarClick}
                                 aria-label="Upload avatar"
+                                disabled={isLoading}
                             >
-                                +
+                                {isLoading ? '' : '+'}
                             </button>
                         </>
                     )}
