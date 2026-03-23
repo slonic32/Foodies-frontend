@@ -174,7 +174,8 @@ function HomePage() {
             </section>
 
             {/* ── Testimonials section ────────────────────── */}
-            {!selectedCategory && <Testimonials />}
+            {/* {!selectedCategory && <Testimonials />} */}
+            <Testimonials />
 
             {/* ── Footer ──────────────────────────────────── */}
             <Footer />

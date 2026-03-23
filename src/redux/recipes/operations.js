@@ -56,6 +56,7 @@ export const createRecipe = createAsyncThunk('recipes/createRecipe', async (form
     }
 });
 import { BACKEND_HOST } from '../../config/backend';
+import { sleep } from '../../utils/sleep';
 
 axios.defaults.baseURL = BACKEND_HOST + '/api/';
 
@@ -74,6 +75,7 @@ export const fetchRecipesByCategory = createAsyncThunk(
                 params.ingredient = ingredient;
             }
             const response = await axios.get('recipes', { params });
+            await sleep(2000);
             return {
                 recipes: response.data.data.recipes,
                 pagination: response.data.data.meta,
@@ -96,6 +98,7 @@ export const fetchRecipeById = createAsyncThunk('recipes/fetchById', async (id, 
 export const fetchRecipesByFilters = createAsyncThunk('recipes/fetchByFilters', async (filters = {}, thunkAPI) => {
     try {
         const response = await axios.get('recipes', { params: filters });
+        await sleep(2000);
         return {
             recipes: response.data.data.recipes,
             pagination: response.data.data.meta,
