@@ -1,4 +1,4 @@
-.container {
+/* .container {
     max-width: 383px;
     margin: 0 auto;
     padding: 0 20px;
@@ -22,7 +22,7 @@
     font-family: 'Mulish', sans-serif;
 }
 
-/* ── Black hero block: border-radius 20px, margin 8px ── */
+
 .heroBlock {
     background-color: #050505;
     border-radius: 20px;
@@ -32,7 +32,7 @@
     flex-direction: column;
 }
 
-/* ── Categories section ─────────────────────────────── */
+
 .categoriesSection {
     padding: 0 20px;
     margin-top: 60px;
@@ -66,5 +66,99 @@
         padding: 0 60px;
         margin-top: 60px;
         gap: 24px;
+    }
+} */
+
+
+/* ── Container ─────────────────────────────────────── */
+.container {
+    max-width: 383px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+@media screen and (min-width: 768px) {
+    .container {
+        max-width: 768px;
+        padding: 0 32px;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .container {
+        max-width: 1440px;
+        padding: 0 80px;
+    }
+}
+
+/* ── Page ─────────────────────────────────────────── */
+.page {
+    min-height: 100vh;
+    font-family: 'Mulish', sans-serif;
+}
+
+/* ── Hero block ───────────────────────────────────── */
+.heroBlock {
+    background-color: #050505;
+    border-radius: 20px;
+    margin: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Sections ─────────────────────────────────────── */
+.categoriesSection {
+    margin-top: 64px;
+}
+
+.testimonialsSection {
+    margin-top: 100px;
+}
+
+/* ── Text ─────────────────────────────────────────── */
+.categoriesSubtitle {
+    max-width: 343px;
+    margin-top: 16px;
+    margin-bottom: 32px;
+    color: #1A1A1A;
+    color: #1A1A1A;
+    letter-spacing: -0.32px;
+}
+
+/* ── Tablet ───────────────────────────────────────── */
+@media screen and (min-width: 768px) {
+    .heroBlock {
+        margin: 12px;
+    }
+
+    .categoriesSection {
+        margin-top: 100px;
+    }
+
+    .categoriesSubtitle {
+        max-width: 540px;
+        margin-top: 20px;
+        margin-bottom: 40px;
+
+    }
+
+    .testimonialsSection {
+        margin-top: 100px;
+    }
+}
+
+/* ── Desktop ──────────────────────────────────────── */
+@media screen and (min-width: 1440px) {
+    .heroBlock {
+        margin: 16px;
+    }
+
+    .categoriesSection {
+        margin-top: 120px;
+    }
+
+    .testimonialsSection {
+        margin-top: 120px;
     }
 }
