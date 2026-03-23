@@ -18,6 +18,8 @@ import { showNotification } from '../../utils/notification.jsx';
 
 import { logout } from '../../redux/auth/operations.js';
 
+import LogOutModal from '../../components/LogOutModal/LogOutModal.jsx';
+
 export default function PrivatPage() {
     const [isSignInOpen, setIsSignInOpen] = useState(false);
     const [isSignUpOpen, setIsSignUpOpen] = useState(false);
@@ -66,82 +68,6 @@ export default function PrivatPage() {
             window.location.reload();
         }
     };
-
-    function LogOutModal({ onClose }) {
-        const handleCancel = () => {
-            if (onClose) {
-                onClose();
-            }
-        };
-
-        return (
-            <div
-                style={{
-                    position: 'fixed',
-                    inset: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 1000,
-                }}
-            >
-                <div
-                    style={{
-                        backgroundColor: '#ffffff',
-                        borderRadius: '8px',
-                        padding: '24px',
-                        maxWidth: '320px',
-                        width: '100%',
-                        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
-                        textAlign: 'center',
-                    }}
-                >
-                    <h2 style={{ margin: '0 0 8px', fontSize: '20px' }}>Log out</h2>
-                    <p style={{ margin: '0 0 24px', fontSize: '14px', color: '#555' }}>
-                        Are you sure you want to log out?
-                    </p>
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            gap: '8px',
-                        }}
-                    >
-                        <button
-                            type="button"
-                            onClick={handleCancel}
-                            style={{
-                                flex: 1,
-                                padding: '8px 12px',
-                                borderRadius: '4px',
-                                border: '1px solid #ccc',
-                                backgroundColor: '#fff',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleConfirmLogout}
-                            style={{
-                                flex: 1,
-                                padding: '8px 12px',
-                                borderRadius: '4px',
-                                border: 'none',
-                                backgroundColor: '#e74c3c',
-                                color: '#fff',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            Log out
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     const { id } = useParams();
 
@@ -221,7 +147,7 @@ export default function PrivatPage() {
                 Back Home
             </NavLink>
 
-            {isLogOutOpen && <LogOutModal onClose={closeLogOutModal} />}
+            {isLogOutOpen && <LogOutModal onClose={closeLogOutModal} onConfirm={handleConfirmLogout} />}
         </div>
     );
 }
