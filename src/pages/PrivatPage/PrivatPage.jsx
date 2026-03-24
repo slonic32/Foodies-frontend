@@ -11,12 +11,32 @@ import {
     selectProfileLoading,
     selectProfileError,
     selectIsFollowing,
+    selectFollowers,
+    selectFollowing,
+    selectRecipes,
+    selectFavorites,
+    selectTabLoading,
 } from '../../redux/users/selectors.js';
-import { fetchOwnProfile, fetchOtherProfile, followUser, unfollowUser } from '../../redux/users/operations.js';
+import {
+    fetchOwnProfile,
+    fetchOtherProfile,
+    followUser,
+    unfollowUser,
+    fetchFollowers,
+    fetchFollowing,
+    fetchOwnRecipes,
+    fetchFavoriteRecipes,
+    deleteOwnRecipe,
+    removeFavoriteRecipe,
+    fetchUserFollowers,
+    fetchUserRecipes,
+} from '../../redux/users/operations.js';
 
 import { showNotification } from '../../utils/notification.jsx';
 
 import { logout } from '../../redux/auth/operations.js';
+import TabsList from '../../components/TabsList/TabsList.jsx';
+import ListItems from '../../components/ListItems/ListItems.jsx';
 
 export default function PrivatPage() {
     const [isSignInOpen, setIsSignInOpen] = useState(false);
@@ -24,6 +44,7 @@ export default function PrivatPage() {
 
     const [isLogOutOpen, setIsLogOutOpen] = useState(false);
     const [isFollowLoading, setIsFollowLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('recipes');
 
     const openSignInModal = () => {
         setIsLogOutOpen(false);
@@ -153,10 +174,34 @@ export default function PrivatPage() {
     const error = useSelector(selectProfileError);
     const isFollowing = useSelector(selectIsFollowing);
 
+    const followers = useSelector(selectFollowers);
+    const following = useSelector(selectFollowing);
+    const recipes = useSelector(selectRecipes);
+    const favorites = useSelector(selectFavorites);
+    const tabLoading = useSelector(selectTabLoading);
+
     const currentUserId = String(currentUser?.id || currentUser?._id || '');
     const profileId = String(id || '');
     const isOwnProfile = currentUserId === profileId;
     const displayedUser = isOwnProfile ? currentUser : profileUser;
+
+    let currentItems = [];
+
+    if (activeTab === 'recipes') {
+        currentItems = recipes;
+    }
+
+    if (activeTab === 'favorites') {
+        currentItems = isOwnProfile ? favorites : [];
+    }
+
+    if (activeTab === 'followers') {
+        currentItems = followers;
+    }
+
+    if (activeTab === 'following') {
+        currentItems = isOwnProfile ? following : [];
+    }
 
     useEffect(() => {
         if (!id || !token || !currentUserId) return;
@@ -167,6 +212,42 @@ export default function PrivatPage() {
             dispatch(fetchOtherProfile({ id, token }));
         }
     }, [dispatch, id, token, currentUserId, isOwnProfile]);
+
+    useEffect(() => {
+        if (!isOwnProfile && (activeTab === 'favorites' || activeTab === 'following')) {
+            setActiveTab('recipes');
+        }
+    }, [isOwnProfile, activeTab]);
+
+    useEffect(() => {
+        if (!token) return;
+
+        if (isOwnProfile) {
+            if (activeTab === 'recipes') {
+                dispatch(fetchOwnRecipes({ token }));
+            }
+
+            if (activeTab === 'favorites') {
+                dispatch(fetchFavoriteRecipes({ token }));
+            }
+
+            if (activeTab === 'followers') {
+                dispatch(fetchFollowers(token));
+            }
+
+            if (activeTab === 'following') {
+                dispatch(fetchFollowing(token));
+            }
+        } else {
+            if (activeTab === 'recipes') {
+                dispatch(fetchUserRecipes({ id, token }));
+            }
+
+            if (activeTab === 'followers') {
+                dispatch(fetchUserFollowers({ id, token }));
+            }
+        }
+    }, [dispatch, token, activeTab, isOwnProfile, id]);
 
     const handleFollowToggle = async () => {
         if (!token || !id || isFollowLoading) return;
@@ -184,6 +265,46 @@ export default function PrivatPage() {
             console.error(error);
         } finally {
             setIsFollowLoading(false);
+        }
+    };
+
+    const handleDeleteRecipe = async (recipe, tab) => {
+        const recipeId = recipe?.id || recipe?._id || recipe?.recipeId;
+        if (!recipeId || !token) return;
+
+        try {
+            if (tab === 'recipes') {
+                await dispatch(deleteOwnRecipe({ recipeId, token })).unwrap();
+                showNotification('Recipe deleted successfully.', 'success');
+            }
+
+            if (tab === 'favorites') {
+                await dispatch(removeFavoriteRecipe({ recipeId, token })).unwrap();
+                showNotification('Recipe removed from favorites.', 'success');
+            }
+        } catch (error) {
+            showNotification('Failed to update recipes.', 'error');
+            console.error(error);
+        }
+    };
+
+    const handleUserCardFollowToggle = async (user) => {
+        const userId = user?.id || user?._id || user?.userId;
+        if (!userId || !token) return;
+
+        try {
+            const shouldUnfollow = activeTab === 'following' || user?.isFollowing === true;
+
+            if (shouldUnfollow) {
+                await dispatch(unfollowUser({ id: userId, token })).unwrap();
+                showNotification('User unfollowed successfully.', 'success');
+            } else {
+                await dispatch(followUser({ id: userId, token })).unwrap();
+                showNotification('User followed successfully.', 'success');
+            }
+        } catch (error) {
+            showNotification('Failed to update follow status.', 'error');
+            console.error(error);
         }
     };
 
@@ -216,6 +337,18 @@ export default function PrivatPage() {
                     {isFollowLoading ? '...' : isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
                 </button>
             )}
+
+            <TabsList activeTab={activeTab} onChange={setActiveTab} isOwnProfile={isOwnProfile} />
+
+            <ListItems
+                items={currentItems}
+                activeTab={activeTab}
+                isOwnProfile={isOwnProfile}
+                isLoading={tabLoading}
+                onDeleteRecipe={handleDeleteRecipe}
+                onFollowToggle={handleUserCardFollowToggle}
+                currentUserId={currentUserId}
+            />
 
             <NavLink to="/" className={css.linkSignIn}>
                 Back Home
