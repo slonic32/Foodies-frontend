@@ -43,7 +43,7 @@ export default function SignInFormModal({ onClose, onCreateAccount }) {
             <h2 className={css.title}>SIGN IN</h2>
             <form onSubmit={handleSubmit(onSubmit)} className={css.form} noValidate>
                 <div className={css.fieldWrap}>
-                    <label htmlFor="signin-email" className="visually-hidden">
+                    <label htmlFor="signin-email" className={css.label}>
                         Email
                     </label>
                     <input
@@ -58,7 +58,7 @@ export default function SignInFormModal({ onClose, onCreateAccount }) {
                 </div>
 
                 <div className={css.fieldWrap}>
-                    <label htmlFor="signin-password" className="visually-hidden">
+                    <label htmlFor="signin-password" className={css.label}>
                         Password
                     </label>
                     <input
