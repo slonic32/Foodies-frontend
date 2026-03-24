@@ -10,10 +10,31 @@ import RecipeFilters from '../RecipeFilters/RecipeFilters';
 import RecipeList from '../RecipeList/RecipeList';
 import RecipePagination from '../RecipePagination/RecipePagination';
 import css from './Recipes.module.css';
+import SignInModal from '../SignInModal/SignInModal';
+import SignUpModal from '../SignUpModal/SignUpModal';
+import LogOutModal from '../LogOutModal/LogOutModal';
 
 function Recipes({ category, onBack }) {
     const dispatch = useDispatch();
-    
+
+    const [isSignInOpen, setIsSignInOpen] = useState(false);
+    const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+    const [isLogOutOpen, setIsLogOutOpen] = useState(false);
+
+    const handleConfirmLogout = async () => {
+        try {
+            await dispatch(logout()).unwrap();
+            showNotification('You have been logged out successfully!', 'success');
+        } catch (error) {
+            showNotification('Failed to log out. Please try again.', 'error');
+            console.error('Logout operation failed:', error);
+        }
+        setIsLogOutOpen(false);
+        if (typeof window !== 'undefined') {
+            window.location.reload();
+        }
+    };
+
     const recipes = useSelector(selectRecipes);
     const isLoading = useSelector(selectIsLoading);
     const error = useSelector(selectError);
@@ -24,7 +45,7 @@ function Recipes({ category, onBack }) {
 
     // Format category name (e.g., 'beef' -> 'Beef')
     const categoryDisplay = category
-        ? typeof category === 'string' 
+        ? typeof category === 'string'
             ? category.charAt(0).toUpperCase() + category.slice(1)
             : category.name
         : 'All Categories';
@@ -44,13 +65,15 @@ function Recipes({ category, onBack }) {
     const handleFilterChange = (filters) => {
         setActiveFilters(filters);
         const fetchData = async () => {
-            const result = await dispatch(fetchRecipesByCategory({
-                categoryId,
-                area: filters.area || undefined,
-                ingredient: filters.ingredients || undefined,
-                page: 1,
-                limit: 12,
-            }));
+            const result = await dispatch(
+                fetchRecipesByCategory({
+                    categoryId,
+                    area: filters.area || undefined,
+                    ingredient: filters.ingredients || undefined,
+                    page: 1,
+                    limit: 12,
+                }),
+            );
             if (result.payload?.pagination) {
                 dispatch(setPagination(result.payload.pagination));
             }
@@ -60,13 +83,15 @@ function Recipes({ category, onBack }) {
 
     const handlePageChange = (page) => {
         const fetchData = async () => {
-            const result = await dispatch(fetchRecipesByCategory({
-                categoryId,
-                area: activeFilters.area || undefined,
-                ingredient: activeFilters.ingredients || undefined,
-                page,
-                limit: 12,
-            }));
+            const result = await dispatch(
+                fetchRecipesByCategory({
+                    categoryId,
+                    area: activeFilters.area || undefined,
+                    ingredient: activeFilters.ingredients || undefined,
+                    page,
+                    limit: 12,
+                }),
+            );
             if (result.payload?.pagination) {
                 dispatch(setPagination(result.payload.pagination));
             }
@@ -77,14 +102,22 @@ function Recipes({ category, onBack }) {
     return (
         <div className={css.container}>
             {/* Back Button */}
-            <button 
-                className={css.backBtn}
-                onClick={onBack}
-                aria-label="Back to categories"
-            >
+            <button className={css.backBtn} onClick={onBack} aria-label="Back to categories">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12.7136 8.00058L3.28549 7.99956" stroke="#050505" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M7.99902 12.7141L3.28549 7.99956L8.00004 3.28602" stroke="#050505" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path
+                        d="M12.7136 8.00058L3.28549 7.99956"
+                        stroke="#050505"
+                        strokeWidth="1.3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    />
+                    <path
+                        d="M7.99902 12.7141L3.28549 7.99956L8.00004 3.28602"
+                        stroke="#050505"
+                        strokeWidth="1.3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    />
                 </svg>
                 BACK
             </button>
@@ -105,11 +138,16 @@ function Recipes({ category, onBack }) {
                 </aside>
                 <div className={css.main}>
                     {/* Recipe List */}
-                    <RecipeList recipes={recipes} isLoading={isLoading} error={error} />
+                    <RecipeList
+                        recipes={recipes}
+                        isLoading={isLoading}
+                        error={error}
+                        onOpenSignIn={() => setIsSignInOpen(true)}
+                    />
 
                     {/* Pagination */}
                     {!isLoading && (
-                        <RecipePagination 
+                        <RecipePagination
                             currentPage={currentPage}
                             totalRecipes={totalRecipes}
                             onPageChange={handlePageChange}
@@ -117,6 +155,25 @@ function Recipes({ category, onBack }) {
                     )}
                 </div>
             </div>
+            {isSignInOpen && (
+                <SignInModal
+                    onClose={() => setIsSignInOpen(false)}
+                    onCreateAccount={() => {
+                        setIsSignInOpen(false);
+                        setIsSignUpOpen(true);
+                    }}
+                />
+            )}
+            {isSignUpOpen && (
+                <SignUpModal
+                    onClose={() => setIsSignUpOpen(false)}
+                    onSignIn={() => {
+                        setIsSignUpOpen(false);
+                        setIsSignInOpen(true);
+                    }}
+                />
+            )}
+            {isLogOutOpen && <LogOutModal onClose={() => setIsLogOutOpen(false)} onConfirm={handleConfirmLogout} />}
         </div>
     );
 }
