@@ -2,7 +2,8 @@
 .filtersContainer {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
+    width: 100%;
 }
 
 /* Dropdown wrapper */
@@ -131,28 +132,9 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-    .filtersContainer {
-        gap: 16px;
-        margin-bottom: 30px;
-    }
 
-    .dropdownToggle {
-        padding: 14px 18px;
-        font-size: 14px;
-    }
-
-    .dropdownItem {
-        padding: 10px 20px;
-        font-size: 14px;
-    }
-
-    .dropdownMenu {
-        border-radius: 16px;
-    }
-}
-
-@media (max-width: 480px) {
+/* Rubbery / tiny screens (< 375px) */
+@media (max-width: 374px) {
     .filtersContainer {
         gap: 12px;
     }
@@ -170,5 +152,42 @@
     .dropdownMenu {
         max-height: 250px;
         border-radius: 14px;
+    }
+}
+
+/* Mobile from 375px — one below the other */
+@media (min-width: 375px) and (max-width: 767px) {
+    .filtersContainer {
+        gap: 14px;
+    }
+
+    .dropdownToggle {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+
+    .dropdownItem {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .dropdownMenu {
+        border-radius: 16px;
+    }
+}
+
+/* Tablet from 768px — side by side */
+@media (min-width: 768px) and (max-width: 1439px) {
+    .filtersContainer {
+        flex-direction: row;
+        gap: 18px;
+    }
+}
+
+/* Desktop from 1440px — back to column */
+@media (min-width: 1440px) {
+    .filtersContainer {
+        flex-direction: column;
+        gap: 20px;
     }
 }

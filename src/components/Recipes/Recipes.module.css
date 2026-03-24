@@ -56,18 +56,17 @@
 }
 
 /* Two-column layout: sidebar (filters) + main (recipes) */
+/* Mobile & tablet: column */
 .content {
     display: flex;
-    align-items: flex-start;
-    gap: 40px;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .sidebar {
-    flex: 0 0 330px;
-    width: 330px;
-    min-width: 330px;
-    position: sticky;
-    top: 20px;
+    flex: none;
+    width: 100%;
+    position: static;
 }
 
 .main {
@@ -75,15 +74,19 @@
     min-width: 0;
 }
 
-@media (max-width: 768px) {
+/* Desktop from 1440px: row */
+@media (min-width: 1440px) {
     .content {
-        flex-direction: column;
-        gap: 24px;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 40px;
     }
 
     .sidebar {
-        flex: none;
-        width: 100%;
-        position: static;
+        flex: 0 0 330px;
+        width: 330px;
+        min-width: 330px;
+        position: sticky;
+        top: 20px;
     }
 }

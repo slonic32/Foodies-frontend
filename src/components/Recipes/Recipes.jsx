@@ -108,11 +108,13 @@ function Recipes({ category, onBack }) {
                     <RecipeList recipes={recipes} isLoading={isLoading} error={error} />
 
                     {/* Pagination */}
-                    <RecipePagination 
-                        currentPage={currentPage}
-                        totalRecipes={totalRecipes}
-                        onPageChange={handlePageChange}
-                    />
+                    {!isLoading && (
+                        <RecipePagination 
+                            currentPage={currentPage}
+                            totalRecipes={totalRecipes}
+                            onPageChange={handlePageChange}
+                        />
+                    )}
                 </div>
             </div>
         </div>

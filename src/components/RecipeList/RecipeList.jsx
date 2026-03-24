@@ -1,4 +1,5 @@
 import RecipeCard from '../RecipeCard/RecipeCard';
+import Loader from '../Loader/Loader';
 import css from './RecipeList.module.css';
 
 import { fetchUserFavorites } from '../../redux/favorites/favoritesOperations';
@@ -16,7 +17,7 @@ function RecipeList({ recipes, isLoading, error }) {
     }, [isLoggedIn, dispatch]);
 
     if (isLoading) {
-        return <div className={css.loading}>Loading recipes...</div>;
+        return <Loader />;
     }
 
     if (error) {
