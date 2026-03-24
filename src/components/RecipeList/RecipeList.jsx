@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLoggedIn } from '../../redux/auth/selectors';
 import { useEffect } from 'react';
 
-function RecipeList({ recipes, isLoading, error }) {
+function RecipeList({ recipes, isLoading, error, onOpenSignIn }) {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(selectIsLoggedIn);
     useEffect(() => {
@@ -32,7 +32,7 @@ function RecipeList({ recipes, isLoading, error }) {
         <ul className={css.list}>
             {recipes.map((recipe) => (
                 <li key={recipe.id || recipe._id} className={css.item}>
-                    <RecipeCard recipe={recipe} />
+                    <RecipeCard recipe={recipe} onOpenSignIn={onOpenSignIn} />
                 </li>
             ))}
         </ul>
