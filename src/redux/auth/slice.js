@@ -48,14 +48,14 @@ const authSlice = createSlice({
                 const user = action.payload.user || {};
 
                 state.user.id = user.id ?? user._id ?? null;
-                state.user.name = user.name ?? null;
-                state.user.email = user.email ?? null;
+                state.user.name = action.payload.user.name;
+                state.user.email = action.payload.user.email;
 
-                state.user.avatar = user.avatar ?? null;
+                state.user.avatar = action.payload.user.avatar;
 
-                state.token = null;
+                state.token = action.payload.token;
 
-                state.isLoggedIn = false;
+                state.isLoggedIn = true;
                 state.error = null;
                 state.loading = false;
             })
