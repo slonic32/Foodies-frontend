@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addFavorite, deleteFavorite } from '../../redux/favorites/favoritesOperations';
 import { selectFavoriteItems } from '../../redux/favorites/favoritesSelectors';
 import { selectIsLoggedIn } from '../../redux/auth/selectors';
+import { useNavigate } from 'react-router-dom';
 
 // Fallback images for recipe cards
 const FALLBACK_IMAGES = {
@@ -19,7 +20,7 @@ function getRandomFallbackImage() {
     return FALLBACK_IMAGES[recipeNum];
 }
 
-function RecipeCard({ recipe }) {
+function RecipeCard({ recipe, onOpenSignIn }) {
     const { id, title, thumb, preview, description, owner } = recipe;
 
     const recipeId = id;
@@ -31,6 +32,7 @@ function RecipeCard({ recipe }) {
     const favoriteItems = useSelector(selectFavoriteItems);
 
     const isLoggedIn = useSelector(selectIsLoggedIn);
+    const navigate = useNavigate();
 
     const isFavorite = favoriteItems.includes(recipe.id);
 
@@ -39,6 +41,14 @@ function RecipeCard({ recipe }) {
             dispatch(deleteFavorite(recipe.id));
         } else {
             dispatch(addFavorite(recipe.id));
+        }
+    };
+
+    const handleAuthorClick = () => {
+        if (isLoggedIn) {
+            navigate(`/user/${owner.id}`);
+        } else {
+            onOpenSignIn();
         }
     };
 
@@ -51,7 +61,7 @@ function RecipeCard({ recipe }) {
                 <h3 className={css.title}>{title}</h3>
                 {description && <p className={css.description}>{description}</p>}
                 <div className={css.footer}>
-                    <div className={css.author}>
+                    <div className={css.author} onClick={handleAuthorClick}>
                         <div className={css.avatarWrapper}>
                             {ownerAvatar ? (
                                 <img src={ownerAvatar} alt={ownerName} className={css.avatar} />

@@ -5,18 +5,18 @@
 
 .title {
     font-family: var(--font-family, 'Mulish', sans-serif);
-    font-size: 32px;
-    font-weight: 700;
+    font-size: 24px;
+    font-weight: 800;
     line-height: 1;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     color: #050505;
-    margin: 0 0 28px;
+    margin: 0 0 32px;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
 }
 
 .fieldWrap {
@@ -25,7 +25,7 @@
 
 .input {
     font-family: var(--font-family, 'Mulish', sans-serif);
-    font-size: 20px;
+    font-size: 14px;
     line-height: 1.2;
     letter-spacing: -0.01em;
     color: #2f2f2f;
@@ -33,7 +33,7 @@
     border: 1px solid rgba(47, 47, 47, 0.2);
     border-radius: 30px;
     height: 50px;
-    padding: 0 16px;
+    padding: 0 24px;
     width: 100%;
     box-sizing: border-box;
     transition: border-color 0.2s ease-in-out;
@@ -58,8 +58,8 @@
 
 .eyeBtn {
     position: absolute;
-    top: 25px;
-    right: 16px;
+    top: 50%;
+    right: 20px;
     transform: translateY(-50%);
     background: none;
     border: none;
@@ -80,12 +80,12 @@
     font-family: var(--font-family, 'Mulish', sans-serif);
     font-size: 12px;
     color: #e74a3b;
-    margin: 8px 6px 0;
+    margin: 6px 6px 0;
 }
 
 .submitBtn {
     font-family: var(--font-family, 'Mulish', sans-serif);
-    font-size: 32px;
+    font-size: 16px;
     font-weight: 700;
     line-height: 1;
     letter-spacing: -0.01em;
@@ -94,7 +94,8 @@
     border-radius: 30px;
     height: 50px;
     width: 100%;
-    margin-top: 18px;
+    margin-top: 16px;
+    cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     background-color: #050505;
 }
@@ -110,8 +111,8 @@
 
 .metaText {
     font-family: var(--font-family, 'Mulish', sans-serif);
-    font-size: 20px;
-    line-height: 1.2;
+    font-size: 14px;
+    line-height: 1.4;
     letter-spacing: -0.01em;
     color: rgba(47, 47, 47, 0.5);
     text-align: center;
@@ -124,11 +125,13 @@
     line-height: inherit;
     letter-spacing: inherit;
     color: #050505;
-    margin-left: 6px;
+    font-weight: 500;
+    margin-left: 4px;
     padding: 0;
     border: none;
     background: none;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .switchBtn:hover {
@@ -148,59 +151,28 @@
     border: 0;
 }
 
-@media screen and (min-width: 375px) {
-    .title {
-        font-size: 40px;
-        margin-bottom: 32px;
-    }
-
-    .input {
-        font-size: 24px;
-    }
-
-    .submitBtn {
-        font-size: 32px;
-    }
-
-    .metaText {
-        font-size: 20px;
-        margin-top: 14px;
-    }
-}
-
 @media screen and (min-width: 768px) {
     .title {
+        font-size: 32px;
         margin-bottom: 40px;
     }
 
+    .form {
+        gap: 16px;
+    }
+
     .input {
         height: 56px;
-        padding: 0 24px;
-    }
-
-    .passwordField .input {
-        padding-right: 64px;
-    }
-
-    .eyeBtn {
-        top: 28px;
-        right: 20px;
+        font-size: 16px;
     }
 
     .submitBtn {
         height: 56px;
-        font-size: 28px;
-        margin-top: 16px;
+        font-size: 20px;
+        margin-top: 20px;
     }
 
     .metaText {
-        font-size: 24px;
-        margin-top: 16px;
-    }
-}
-
-@media screen and (min-width: 1440px) {
-    .wrapper {
-        max-width: 400px;
+        font-size: 16px;
     }
 }

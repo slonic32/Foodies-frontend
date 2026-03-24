@@ -11,6 +11,7 @@ import MainTitle from '../../components/MainTitle/MainTitle';
 import Subtitle from '../../components/Subtitle/Subtitle';
 import SignInModal from '../../components/SignInModal/SignInModal';
 import SignUpModal from '../../components/SignUpModal/SignUpModal';
+import LogOutModal from '../../components/LogOutModal/LogOutModal.jsx';
 import UserInfo from '../../components/UserInfo/UserInfo.jsx';
 import TabsList from '../../components/TabsList/TabsList.jsx';
 import ListItems from '../../components/ListItems/ListItems.jsx';
@@ -114,78 +115,6 @@ export default function PrivatPage() {
             window.location.reload();
         }
     };
-
-    function LogOutModal({ onClose }) {
-        return (
-            <div
-                style={{
-                    position: 'fixed',
-                    inset: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 1000,
-                }}
-            >
-                <div
-                    style={{
-                        backgroundColor: '#ffffff',
-                        borderRadius: '8px',
-                        padding: '24px',
-                        maxWidth: '320px',
-                        width: '100%',
-                        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
-                        textAlign: 'center',
-                    }}
-                >
-                    <h2 style={{ margin: '0 0 8px', fontSize: '20px' }}>Log out</h2>
-                    <p style={{ margin: '0 0 24px', fontSize: '14px', color: '#555' }}>
-                        Are you sure you want to log out?
-                    </p>
-
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            gap: '8px',
-                        }}
-                    >
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            style={{
-                                flex: 1,
-                                padding: '8px 12px',
-                                borderRadius: '4px',
-                                border: '1px solid #ccc',
-                                backgroundColor: '#fff',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            Cancel
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={handleConfirmLogout}
-                            style={{
-                                flex: 1,
-                                padding: '8px 12px',
-                                borderRadius: '4px',
-                                border: 'none',
-                                backgroundColor: '#e74c3c',
-                                color: '#fff',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            Log out
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     const currentUserId = String(currentUser?.id || currentUser?._id || '');
     const profileId = String(id || '');
@@ -467,7 +396,7 @@ export default function PrivatPage() {
 
             {isSignInOpen && <SignInModal onClose={closeSignInModal} onCreateAccount={openSignUpModal} />}
             {isSignUpOpen && <SignUpModal onClose={closeSignUpModal} onSignIn={openSignInModal} />}
-            {isLogOutOpen && <LogOutModal onClose={closeLogOutModal} />}
+            {isLogOutOpen && <LogOutModal onClose={closeLogOutModal} onConfirm={handleConfirmLogout} />}
         </div>
     );
 }
