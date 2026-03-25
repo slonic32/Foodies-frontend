@@ -2,10 +2,13 @@ import { NavLink } from 'react-router-dom';
 import { navItems } from './navItems';
 import css from './Navigation.module.css';
 
-export default function Navigation({ mobile = false, onNavigate }) {
+export default function Navigation({ mobile = false, onNavigate, theme = 'light' }) {
     const navClass = mobile ? css.mobileNav : css.nav;
 
-    const getLinkClass = ({ isActive }) => (isActive ? `${css.link} ${css.active}` : css.link);
+    const getLinkClass = ({ isActive }) =>
+        isActive
+            ? `${css.link} ${theme === 'dark' ? css.dark : css.light} ${css.active}`
+            : `${css.link} ${theme === 'dark' ? css.dark : css.light}`;
 
     return (
         <nav className={navClass}>

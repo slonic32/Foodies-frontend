@@ -1,8 +1,10 @@
 .wrap {
   width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   border-bottom: 1px solid #bfbebe;
+  -webkit-overflow-scrolling: touch;
 }
 
 .wrap::-webkit-scrollbar {
@@ -16,7 +18,7 @@
   display: inline-flex;
   align-items: center;
   gap: 18px;
-  min-width: 100%;
+  min-width: max-content;
 }
 
 .item {

@@ -1,10 +1,22 @@
-import { useEffect, useState } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import css from './PrivatPage.module.css';
+
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import PathInfo from '../../components/PathInfo/PathInfo';
+import MainTitle from '../../components/MainTitle/MainTitle';
+import Subtitle from '../../components/Subtitle/Subtitle';
+import SignInModal from '../../components/SignInModal/SignInModal';
+import SignUpModal from '../../components/SignUpModal/SignUpModal';
+import LogOutModal from '../../components/LogOutModal/LogOutModal.jsx';
 import UserInfo from '../../components/UserInfo/UserInfo.jsx';
-// import UserCard from '../../components/UserCard/UserCard.jsx';
+import TabsList from '../../components/TabsList/TabsList.jsx';
+import ListItems from '../../components/ListItems/ListItems.jsx';
+import RecipePagination from '../../components/RecipePagination/RecipePagination.jsx';
+
 import { selectUser, selectToken } from '../../redux/auth/selectors.js';
 import {
     selectProfile,
@@ -16,7 +28,9 @@ import {
     selectRecipes,
     selectFavorites,
     selectTabLoading,
+    selectMeta,
 } from '../../redux/users/selectors.js';
+
 import {
     fetchOwnProfile,
     fetchOtherProfile,
@@ -32,21 +46,37 @@ import {
     fetchUserRecipes,
 } from '../../redux/users/operations.js';
 
+import { logout } from '../../redux/auth/operations.js';
 import { showNotification } from '../../utils/notification.jsx';
 
-import { logout } from '../../redux/auth/operations.js';
-import TabsList from '../../components/TabsList/TabsList.jsx';
-import ListItems from '../../components/ListItems/ListItems.jsx';
-
-import LogOutModal from '../../components/LogOutModal/LogOutModal.jsx';
+const USER_ITEMS_PER_PAGE = 5;
 
 export default function PrivatPage() {
     const [isSignInOpen, setIsSignInOpen] = useState(false);
     const [isSignUpOpen, setIsSignUpOpen] = useState(false);
-
     const [isLogOutOpen, setIsLogOutOpen] = useState(false);
     const [isFollowLoading, setIsFollowLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('recipes');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentUsersPage, setCurrentUsersPage] = useState(1);
+
+    const dispatch = useDispatch();
+    const { id } = useParams();
+
+    const currentUser = useSelector(selectUser);
+    const token = useSelector(selectToken);
+
+    const profileUser = useSelector(selectProfile);
+    const loading = useSelector(selectProfileLoading);
+    const error = useSelector(selectProfileError);
+    const isFollowing = useSelector(selectIsFollowing);
+
+    const followers = useSelector(selectFollowers);
+    const following = useSelector(selectFollowing);
+    const recipes = useSelector(selectRecipes);
+    const favorites = useSelector(selectFavorites);
+    const tabLoading = useSelector(selectTabLoading);
+    const meta = useSelector(selectMeta);
 
     const openSignInModal = () => {
         setIsLogOutOpen(false);
@@ -70,12 +100,9 @@ export default function PrivatPage() {
     const closeSignUpModal = () => setIsSignUpOpen(false);
     const closeLogOutModal = () => setIsLogOutOpen(false);
 
-    const dispatch = useDispatch();
-
     const handleConfirmLogout = async () => {
         try {
             await dispatch(logout()).unwrap();
-
             showNotification('You have been logged out successfully!', 'success');
         } catch (error) {
             showNotification('Failed to log out. Please try again.', 'error');
@@ -85,59 +112,34 @@ export default function PrivatPage() {
         closeLogOutModal();
 
         if (typeof window !== 'undefined') {
-            // Reload the page to ensure UI reflects logged-out state.
             window.location.reload();
         }
     };
 
-    const { id } = useParams();
-
-    const currentUser = useSelector(selectUser);
-    const token = useSelector(selectToken);
-
-    const profileUser = useSelector(selectProfile);
-    const loading = useSelector(selectProfileLoading);
-    const error = useSelector(selectProfileError);
-    const isFollowing = useSelector(selectIsFollowing);
-
-    const followers = useSelector(selectFollowers);
-    const following = useSelector(selectFollowing);
-    const recipes = useSelector(selectRecipes);
-    const favorites = useSelector(selectFavorites);
-    const tabLoading = useSelector(selectTabLoading);
-
     const currentUserId = String(currentUser?.id || currentUser?._id || '');
     const profileId = String(id || '');
-    const isOwnProfile = currentUserId === profileId;
-    const displayedUser = isOwnProfile ? currentUser : profileUser;
-
-    let currentItems = [];
-
-    if (activeTab === 'recipes') {
-        currentItems = recipes;
-    }
-
-    if (activeTab === 'favorites') {
-        currentItems = isOwnProfile ? favorites : [];
-    }
-
-    if (activeTab === 'followers') {
-        currentItems = followers;
-    }
-
-    if (activeTab === 'following') {
-        currentItems = isOwnProfile ? following : [];
-    }
+    const isOwnProfile = !profileId || currentUserId === profileId;
+    const displayedUser = isOwnProfile ? profileUser || currentUser : profileUser;
 
     useEffect(() => {
-        if (!id || !token || !currentUserId) return;
+        if (!token || !currentUserId) return;
 
         if (isOwnProfile) {
             dispatch(fetchOwnProfile(token));
-        } else {
+        } else if (id) {
             dispatch(fetchOtherProfile({ id, token }));
         }
     }, [dispatch, id, token, currentUserId, isOwnProfile]);
+
+    useEffect(() => {
+        if (!token) return;
+        dispatch(fetchFollowing(token));
+    }, [dispatch, token]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+        setCurrentUsersPage(1);
+    }, [activeTab, id]);
 
     useEffect(() => {
         if (!isOwnProfile && (activeTab === 'favorites' || activeTab === 'following')) {
@@ -150,11 +152,11 @@ export default function PrivatPage() {
 
         if (isOwnProfile) {
             if (activeTab === 'recipes') {
-                dispatch(fetchOwnRecipes({ token }));
+                dispatch(fetchOwnRecipes({ token, page: currentPage }));
             }
 
             if (activeTab === 'favorites') {
-                dispatch(fetchFavoriteRecipes({ token }));
+                dispatch(fetchFavoriteRecipes({ token, page: currentPage }));
             }
 
             if (activeTab === 'followers') {
@@ -166,14 +168,36 @@ export default function PrivatPage() {
             }
         } else {
             if (activeTab === 'recipes') {
-                dispatch(fetchUserRecipes({ id, token }));
+                dispatch(fetchUserRecipes({ id, token, page: currentPage }));
             }
 
             if (activeTab === 'followers') {
                 dispatch(fetchUserFollowers({ id, token }));
             }
         }
-    }, [dispatch, token, activeTab, isOwnProfile, id]);
+    }, [dispatch, token, activeTab, isOwnProfile, id, currentPage]);
+
+    const currentItems = useMemo(() => {
+        if (activeTab === 'recipes') return recipes;
+        if (activeTab === 'favorites') return isOwnProfile ? favorites : [];
+        if (activeTab === 'followers') return followers;
+        if (activeTab === 'following') return isOwnProfile ? following : [];
+        return [];
+    }, [activeTab, recipes, favorites, followers, following, isOwnProfile]);
+
+    const isRecipeTab = activeTab === 'recipes' || activeTab === 'favorites';
+    const isUserTab = activeTab === 'followers' || activeTab === 'following';
+
+    const displayedItems = isUserTab
+        ? currentItems.slice((currentUsersPage - 1) * USER_ITEMS_PER_PAGE, currentUsersPage * USER_ITEMS_PER_PAGE)
+        : currentItems;
+
+    const totalItems = meta?.total || meta?.totalItems || 0;
+
+    const followingIds = useMemo(
+        () => new Set((following || []).map((user) => String(user?.id || user?._id || user?.userId || ''))),
+        [following],
+    );
 
     const handleFollowToggle = async () => {
         if (!token || !id || isFollowLoading) return;
@@ -186,6 +210,14 @@ export default function PrivatPage() {
             } else {
                 await dispatch(followUser({ id, token })).unwrap();
             }
+
+            await dispatch(fetchOtherProfile({ id, token })).unwrap();
+
+            if (activeTab === 'followers') {
+                await dispatch(fetchUserFollowers({ id, token })).unwrap();
+            }
+
+            await dispatch(fetchFollowing(token)).unwrap();
         } catch (error) {
             showNotification('Failed to update follow status.', 'error');
             console.error(error);
@@ -219,7 +251,8 @@ export default function PrivatPage() {
         if (!userId || !token) return;
 
         try {
-            const shouldUnfollow = activeTab === 'following' || user?.isFollowing === true;
+            const shouldUnfollow =
+                activeTab === 'following' || followingIds.has(String(userId)) || user?.isFollowing === true;
 
             if (shouldUnfollow) {
                 await dispatch(unfollowUser({ id: userId, token })).unwrap();
@@ -228,6 +261,20 @@ export default function PrivatPage() {
                 await dispatch(followUser({ id: userId, token })).unwrap();
                 showNotification('User followed successfully.', 'success');
             }
+
+            await dispatch(fetchFollowing(token)).unwrap();
+
+            if (activeTab === 'followers') {
+                if (isOwnProfile) {
+                    await dispatch(fetchFollowers(token)).unwrap();
+                } else if (id) {
+                    await dispatch(fetchUserFollowers({ id, token })).unwrap();
+                }
+            }
+
+            if (activeTab === 'following' && isOwnProfile) {
+                await dispatch(fetchFollowing(token)).unwrap();
+            }
         } catch (error) {
             showNotification('Failed to update follow status.', 'error');
             console.error(error);
@@ -235,51 +282,120 @@ export default function PrivatPage() {
     };
 
     if (loading) {
-        return <div className={css.container}>Loading profile...</div>;
+        return (
+            <div className={css.page}>
+                <Header
+                    theme="dark"
+                    onSignInClick={openSignInModal}
+                    onSignUpClick={openSignUpModal}
+                    onLogOutClick={openLogOutModal}
+                />
+                <main className={css.main}>
+                    <div className={css.container}>Loading profile...</div>
+                </main>
+                <Footer />
+            </div>
+        );
     }
 
     if (error) {
-        return <div className={css.container}>{error}</div>;
+        return (
+            <div className={css.page}>
+                <Header
+                    theme="dark"
+                    onSignInClick={openSignInModal}
+                    onSignUpClick={openSignUpModal}
+                    onLogOutClick={openLogOutModal}
+                />
+                <main className={css.main}>
+                    <div className={css.container}>{error}</div>
+                </main>
+                <Footer />
+            </div>
+        );
     }
 
     return (
-        <div className={css.container}>
-            <h1 className={css.title}>PROFILE</h1>
-
-            <p className={css.text}>
-                Reveal your culinary art, share your favorite recipe and create gastronomic masterpieces with us.
-            </p>
-
-            <div className={css.userInfoWrap}>
-                <UserInfo user={displayedUser} isOwnProfile={isOwnProfile} />
-            </div>
-
-            {isOwnProfile ? (
-                <button type="button" className={css.actionBtn} onClick={openLogOutModal}>
-                    LOG OUT
-                </button>
-            ) : (
-                <button type="button" className={css.actionBtn} onClick={handleFollowToggle} disabled={isFollowLoading}>
-                    {isFollowLoading ? '...' : isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
-                </button>
-            )}
-
-            <TabsList activeTab={activeTab} onChange={setActiveTab} isOwnProfile={isOwnProfile} />
-
-            <ListItems
-                items={currentItems}
-                activeTab={activeTab}
-                isOwnProfile={isOwnProfile}
-                isLoading={tabLoading}
-                onDeleteRecipe={handleDeleteRecipe}
-                onFollowToggle={handleUserCardFollowToggle}
-                currentUserId={currentUserId}
+        <div className={css.page}>
+            <Header
+                theme="dark"
+                onSignInClick={openSignInModal}
+                onSignUpClick={openSignUpModal}
+                onLogOutClick={openLogOutModal}
             />
 
-            <NavLink to="/" className={css.linkSignIn}>
-                Back Home
-            </NavLink>
+            <main className={css.main}>
+                <div className={css.container}>
+                    <PathInfo pageTitle="PROFILE" />
 
+                    <div className={css.titleSection}>
+                        <MainTitle>PROFILE</MainTitle>
+                        <Subtitle className={css.subtitle}>
+                            Reveal your culinary art, share your favorite recipe and create gastronomic masterpieces
+                            with us.
+                        </Subtitle>
+                    </div>
+
+                    <div className={css.profileLayout}>
+                        <div className={css.leftColumn}>
+                            <div className={css.userInfoWrap}>
+                                <UserInfo user={displayedUser} isOwnProfile={isOwnProfile} />
+                            </div>
+
+                            {isOwnProfile ? (
+                                <button type="button" className={css.actionBtn} onClick={openLogOutModal}>
+                                    LOG OUT
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className={css.actionBtn}
+                                    onClick={handleFollowToggle}
+                                    disabled={isFollowLoading}
+                                >
+                                    {isFollowLoading ? '...' : isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
+                                </button>
+                            )}
+                        </div>
+
+                        <div className={css.rightColumn}>
+                            <TabsList activeTab={activeTab} onChange={setActiveTab} isOwnProfile={isOwnProfile} />
+
+                            <ListItems
+                                items={displayedItems}
+                                activeTab={activeTab}
+                                isOwnProfile={isOwnProfile}
+                                isLoading={tabLoading}
+                                onDeleteRecipe={handleDeleteRecipe}
+                                onFollowToggle={handleUserCardFollowToggle}
+                                currentUserId={currentUserId}
+                                followingIds={followingIds}
+                            />
+
+                            {isRecipeTab && (
+                                <RecipePagination
+                                    currentPage={currentPage}
+                                    totalRecipes={totalItems}
+                                    onPageChange={setCurrentPage}
+                                />
+                            )}
+
+                            {isUserTab && (
+                                <RecipePagination
+                                    currentPage={currentUsersPage}
+                                    totalRecipes={currentItems.length}
+                                    onPageChange={setCurrentUsersPage}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <Footer />
+
+            {isSignInOpen && <SignInModal onClose={closeSignInModal} onCreateAccount={openSignUpModal} />}
+            {isSignUpOpen && <SignUpModal onClose={closeSignUpModal} onSignIn={openSignInModal} />}
             {isLogOutOpen && <LogOutModal onClose={closeLogOutModal} onConfirm={handleConfirmLogout} />}
         </div>
     );

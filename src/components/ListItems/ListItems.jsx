@@ -37,6 +37,7 @@ export default function ListItems({
     deletingRecipeId = null,
     togglingUserId = null,
     currentUserId,
+    followingIds,
 }) {
     if (isLoading) {
         return <p className={css.message}>Loading...</p>;
@@ -78,6 +79,7 @@ export default function ListItems({
                                 isLoading={togglingUserId === userId}
                                 onFollowToggle={onFollowToggle}
                                 currentUserId={currentUserId}
+                                followingIds={followingIds}
                             />
                         </li>
                     );

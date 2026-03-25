@@ -9,7 +9,7 @@ import css from './AddRecipePage.module.css';
 function AddRecipePage() {
     return (
         <div className={css.page}>
-            <Header />
+            <Header theme="dark" />
 
             <main className={css.main}>
                 <div className={css.container}>

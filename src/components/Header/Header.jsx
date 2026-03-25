@@ -8,7 +8,7 @@ import UserBar from '../UserBar/UserBar';
 import BurgerButton from '../BurgerButton/BurgerButton';
 import MobileMenu from '../MobileMenu/MobileMenu';
 
-export default function Header({ onSignInClick, onSignUpClick, onLogOutClick }) {
+export default function Header({ onSignInClick, onSignUpClick, onLogOutClick, theme = 'light' }) {
     const { isLoggedIn, user } = useAuth();
     // const isLoggedIn = true;
     // const user = {
@@ -24,7 +24,7 @@ export default function Header({ onSignInClick, onSignUpClick, onLogOutClick }) 
         <header className={css.header}>
             <div className={css.container}>
                 <div className={css.logo}>
-                    <Logo variant="light" />
+                    <Logo variant={theme === 'dark' ? 'dark' : 'light'} />
                 </div>
 
                 {!isLoggedIn ? (
@@ -35,7 +35,7 @@ export default function Header({ onSignInClick, onSignUpClick, onLogOutClick }) 
                     <>
                         <div className={css.nav}>
                             <div className={css.desktopNav}>
-                                <Navigation />
+                                <Navigation theme={theme} />
                             </div>
                         </div>
 
@@ -44,7 +44,7 @@ export default function Header({ onSignInClick, onSignUpClick, onLogOutClick }) 
                                 <UserBar user={user} onLogOutClick={onLogOutClick} />
 
                                 <div className={css.burgerWrapper}>
-                                    <BurgerButton onOpen={() => setIsMenuOpen(true)} />
+                                    <BurgerButton onOpen={() => setIsMenuOpen(true)} theme={theme} />
                                 </div>
                             </div>
                         </div>

@@ -25,7 +25,14 @@ function getRecipeImage(recipe) {
     return normalizedImage.startsWith('/') ? `${BACKEND_HOST}${normalizedImage}` : `${BACKEND_HOST}/${normalizedImage}`;
 }
 
-export default function UserCard({ user, activeTab = 'followers', isLoading = false, onFollowToggle, currentUserId }) {
+export default function UserCard({
+    user,
+    activeTab = 'followers',
+    isLoading = false,
+    onFollowToggle,
+    currentUserId,
+    followingIds,
+}) {
     const userId = user?.id || user?._id || user?.userId || '';
     const isOwnCard = String(currentUserId) === String(userId);
     const userName = user?.name || 'User';
@@ -38,7 +45,11 @@ export default function UserCard({ user, activeTab = 'followers', isLoading = fa
           ? user.recipes
           : [];
 
-    const isFollowing = user?.isFollowing ?? user?.following ?? activeTab === 'following';
+    const isFollowing =
+        activeTab === 'following' ||
+        followingIds?.has(String(userId)) ||
+        user?.isFollowing === true ||
+        user?.following === true;
 
     const shouldShowFollowButton = !isOwnCard && (activeTab === 'followers' || activeTab === 'following');
 
@@ -73,19 +84,26 @@ export default function UserCard({ user, activeTab = 'followers', isLoading = fa
                 </div>
 
                 <div className={css.right}>
-                    <div className={css.previewList}>
-                        {recipesPreview.slice(0, 4).map((recipe) => {
-                            const recipeId = recipe?.id || recipe?._id || recipe?.recipeId;
-                            const recipeImage = getRecipeImage(recipe);
-                            const recipeTitle = recipe?.title || 'Recipe';
+                    {!!recipesPreview.length && (
+                        <div className={css.previewList}>
+                            {recipesPreview.slice(0, 4).map((recipe) => {
+                                const recipeId = recipe?.id || recipe?._id || recipe?.recipeId;
+                                const recipeImage = getRecipeImage(recipe);
+                                const recipeTitle = recipe?.title || 'Recipe';
 
-                            if (!recipeImage) return null;
+                                if (!recipeImage) return null;
 
-                            return (
-                                <img key={recipeId} className={css.previewImg} src={recipeImage} alt={recipeTitle} />
-                            );
-                        })}
-                    </div>
+                                return (
+                                    <img
+                                        key={recipeId || recipeTitle}
+                                        className={css.previewImg}
+                                        src={recipeImage}
+                                        alt={recipeTitle}
+                                    />
+                                );
+                            })}
+                        </div>
+                    )}
 
                     <Link to={`/user/${userId}`} className={css.arrowLink} aria-label={`Open ${userName} profile`}>
                         ↗

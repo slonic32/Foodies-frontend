@@ -197,37 +197,46 @@ const usersSlice = createSlice({
             // ================= FOLLOW =================
             .addCase(followUser.fulfilled, (state, action) => {
                 const targetId = String(action.payload);
+                const profileId = String(state.profile?.id || state.profile?._id || '');
 
-                state.isFollowing = true;
+                if (targetId === profileId) {
+                    state.isFollowing = true;
 
-                if (state.profile) {
-                    state.profile.followersCount = (state.profile.followersCount ?? 0) + 1;
+                    if (state.profile) {
+                        state.profile.followersCount = (state.profile.followersCount ?? 0) + 1;
+                    }
                 }
 
-                const follower = state.followers.find((u) => String(u.id || u._id) === targetId);
-
+                const follower = state.followers.find((u) => String(u.id || u._id || u.userId) === targetId);
                 if (follower) {
                     follower.isFollowing = true;
+                }
+
+                const followingUser = state.following.find((u) => String(u.id || u._id || u.userId) === targetId);
+                if (followingUser) {
+                    followingUser.isFollowing = true;
                 }
             })
 
             // ================= UNFOLLOW =================
             .addCase(unfollowUser.fulfilled, (state, action) => {
                 const targetId = String(action.payload);
+                const profileId = String(state.profile?.id || state.profile?._id || '');
 
-                state.isFollowing = false;
+                if (targetId === profileId) {
+                    state.isFollowing = false;
 
-                if (state.profile) {
-                    state.profile.followersCount = Math.max((state.profile.followersCount ?? 1) - 1, 0);
+                    if (state.profile) {
+                        state.profile.followersCount = Math.max((state.profile.followersCount ?? 1) - 1, 0);
+                    }
                 }
 
-                const follower = state.followers.find((u) => String(u.id || u._id) === targetId);
-
+                const follower = state.followers.find((u) => String(u.id || u._id || u.userId) === targetId);
                 if (follower) {
                     follower.isFollowing = false;
                 }
 
-                state.following = state.following.filter((u) => String(u.id || u._id) !== targetId);
+                state.following = state.following.filter((u) => String(u.id || u._id || u.userId) !== targetId);
             });
     },
 });
